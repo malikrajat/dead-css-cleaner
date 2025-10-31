@@ -2,7 +2,7 @@
   "name": "dead-css-cleaner",
   "displayName": "Dead CSS Cleaner",
   "description": "Clean up dead CSS selectors from React and Angular projects with intelligent analysis and real-time detection",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icon": "icon.png",
   "publisher": "RajatMalik",
   "author": {
