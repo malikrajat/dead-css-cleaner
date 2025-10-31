@@ -1,0 +1,25 @@
+/* Comprehensive test CSS - mix of used and unused selectors */
+
+/* Used by React */
+.react-button { background: blue; }
+.react-primary { color: white; }
+
+/* Used by Angular */
+.angular-header { font-size: 24px; }
+.angular-active { background: green; }
+
+/* Used by both */
+.shared-class { margin: 10px; }
+
+/* Unused selectors */
+.completely-unused { display: none; }
+.another-unused { opacity: 0; }
+.old-legacy-class { font-weight: bold; }
+
+/* Used IDs */
+#react-container { padding: 20px; }
+#angular-main { width: 100%; }
+
+/* Unused IDs */
+#unused-id-1 { height: 50px; }
+#unused-id-2 { border: 1px solid red; }

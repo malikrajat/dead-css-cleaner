@@ -1,0 +1,283 @@
+{
+  "name": "unused-css-detector",
+  "displayName": "Unused CSS Detector",
+  "description": "Detect unused CSS selectors in React and Angular components with real-time analysis and status bar integration",
+  "version": "1.0.0",
+  "icon": "icon.png",
+  "publisher": "Rajat-Malik",
+  "author": {
+    "name": "Rajat Malik",
+    "email": "mr.rajatmalik@gmail.com",
+    "url": "https://github.com/malikrajat/unused-css-detector"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/malikrajat/unused-css-detector.git#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/malikrajat/unused-css-detector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/malikrajat/unused-css-detector/issues"
+  },
+  "keywords": [
+    "css",
+    "unused",
+    "react",
+    "angular",
+    "optimization",
+    "cleanup",
+    "selectors",
+    "performance",
+    "bundle-size",
+    "dead-code"
+  ],
+
+  "galleryBanner": {
+    "color": "#007ACC",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/github/license/malikrajat/unused-css-detector",
+      "href": "https://github.com/malikrajat/unused-css-detector/blob/main/LICENSE",
+      "description": "License"
+    }
+  ],
+  "qna": "marketplace",
+  "sponsor": {
+    "url": "https://github.com/sponsors/codewithrajat"
+  },
+  "engines": {
+    "vscode": "^1.74.0",
+    "node": ">=16.0.0"
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:css",
+    "onLanguage:scss",
+    "onLanguage:less",
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "unusedCssDetector.analyze",
+        "title": "Analyze Unused CSS",
+        "category": "Unused CSS Detector",
+        "icon": "$(search)"
+      },
+      {
+        "command": "unusedCssDetector.showErrors",
+        "title": "Show Analysis Errors",
+        "category": "Unused CSS Detector",
+        "icon": "$(error)"
+      },
+      {
+        "command": "unusedCssDetector.clearErrors",
+        "title": "Clear Error Log",
+        "category": "Unused CSS Detector",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "unusedCssDetector.showPerformanceStats",
+        "title": "Show Performance Statistics",
+        "category": "Unused CSS Detector",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "unusedCssDetector.clearCache",
+        "title": "Clear Analysis Cache",
+        "category": "Unused CSS Detector",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "unusedCssDetector.analyze",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.showErrors",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.clearErrors",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.showPerformanceStats",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.clearCache",
+          "when": "workspaceHasFiles"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Unused CSS Detector",
+      "properties": {
+        "unusedCssDetector.autoAnalyze": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically analyze CSS when files are saved or opened"
+        },
+        "unusedCssDetector.excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/.git/**"
+          ],
+          "description": "Glob patterns for files and directories to exclude from analysis"
+        },
+        "unusedCssDetector.includeFileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".css",
+            ".scss",
+            ".less"
+          ],
+          "description": "CSS file extensions to analyze"
+        },
+        "unusedCssDetector.componentFileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".jsx",
+            ".tsx",
+            ".ts",
+            ".js"
+          ],
+          "description": "Component file extensions to scan for CSS usage"
+        },
+        "unusedCssDetector.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show unused CSS count in status bar"
+        },
+        "unusedCssDetector.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notification messages when analysis completes"
+        },
+        "unusedCssDetector.minFilesForAnalysis": {
+          "type": "number",
+          "default": 1,
+          "minimum": 1,
+          "description": "Minimum number of CSS files required to trigger analysis"
+        },
+        "unusedCssDetector.debounceDelay": {
+          "type": "number",
+          "default": 500,
+          "minimum": 0,
+          "maximum": 5000,
+          "description": "Delay in milliseconds before analyzing after file changes"
+        },
+        "unusedCssDetector.enableCaching": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable file content caching for better performance"
+        },
+        "unusedCssDetector.cacheTimeout": {
+          "type": "number",
+          "default": 300000,
+          "minimum": 60000,
+          "maximum": 1800000,
+          "description": "Cache timeout in milliseconds (default: 5 minutes)"
+        },
+        "unusedCssDetector.maxConcurrentFiles": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Maximum number of files to process concurrently"
+        },
+        "unusedCssDetector.largeProjectThreshold": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 1000,
+          "description": "Number of files that defines a 'large project' for performance optimizations"
+        },
+        "unusedCssDetector.enableFileWatcher": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable intelligent file watching for better performance"
+        },
+        "unusedCssDetector.watcherThrottleDelay": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 500,
+          "maximum": 10000,
+          "description": "Delay in milliseconds for file watcher throttling"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "compile": "tsc -p ./",
+    "compile:production": "tsc -p ./ --sourceMap false",
+    "watch": "npm run webpack:dev -- --watch",
+    "clean": "rimraf out",
+    "build": "npm run clean && npm run webpack:production",
+    "build:dev": "npm run clean && npm run webpack:dev",
+    "webpack:dev": "webpack --mode development",
+    "webpack:production": "webpack --mode production",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "test": "node ./out/test/runTest.js",
+    "package": "npm run build && vsce package",
+    "package:dev": "npm run build:dev && vsce package",
+    "publish": "npm run build && vsce publish",
+    "install-vsce": "npm install -g @vscode/vsce"
+  },
+  "dependencies": {
+    "postcss": "^8.4.31",
+    "postcss-selector-parser": "^6.0.13",
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@types/babel__traverse": "^7.20.2",
+    "@types/mocha": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "@vscode/test-electron": "^2.3.4",
+    "eslint": "^8.47.0",
+    "glob": "^10.3.3",
+    "mocha": "^10.2.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.1.6",
+    "@vscode/vsce": "^2.19.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "ts-loader": "^9.4.4"
+  }
+}

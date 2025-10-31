@@ -1,0 +1,27 @@
+/* Demo CSS with mixed usage */
+.used-class {
+    color: blue;
+}
+
+.another-used-class {
+    font-size: 16px;
+}
+
+.completely-unused {
+    display: none;
+    /* This class is not used anywhere */
+}
+
+.old-unused-style {
+    background: red;
+    /* Legacy style that's no longer needed */
+}
+
+#used-id {
+    padding: 20px;
+}
+
+#unused-id {
+    margin: 10px;
+    /* This ID is not referenced */
+}

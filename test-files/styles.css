@@ -1,0 +1,21 @@
+/* Test CSS file */
+.button {
+    background: blue;
+    padding: 10px;
+}
+
+.primary {
+    color: white;
+}
+
+.unused-class {
+    display: none;
+}
+
+#header {
+    font-size: 24px;
+}
+
+#unused-id {
+    margin: 20px;
+}

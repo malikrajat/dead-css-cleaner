@@ -1,0 +1,18 @@
+<div id="main-content">
+  <h1 class="header">Angular Component</h1>
+  
+  <button 
+    class="button primary"
+    [class.disabled]="isDisabled"
+    (click)="onClick()">
+    Click me
+  </button>
+  
+  <div [ngClass]="dynamicClass">
+    Dynamic content
+  </div>
+  
+  <p class="{{ textClass }}">
+    Interpolated class
+  </p>
+</div>

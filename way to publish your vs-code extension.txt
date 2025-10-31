@@ -1,0 +1,28 @@
+Option 1: Install the extension manually (Recommended)
+	Open VS Code
+	Go to Extensions view (Ctrl+Shift+X)
+	Click the "..." menu → "Install from VSIX..."
+	Select your unused-css-detector-0.0.1.vsix file
+	Reload VS Code
+Option 2: Change the publisher name
+	If you want to publish to the marketplace later, you'll need a valid publisher. Update your package.json:
+
+	Accepted edits to
+
+	package.json
+
+
+Option 3: Create a publisher account
+	To publish to the marketplace:
+
+	Go to https://marketplace.visualstudio.com/manage
+	Create a publisher account
+	Use that publisher name in your package.json
+	Run vsce publish to publish
+	Option 4: For development, use F5 to run
+	The easiest way for development:
+
+	Open this project in VS Code
+	Press F5 to run the extension in a new Extension Development Host window
+	This bypasses the marketplace entirely
+	The 404 error happens because VS Code tries to check for updates from the marketplace, but your extension isn't published there yet. Installing locally or running in development mode will solve this.
