@@ -4,7 +4,7 @@
   "description": "Detect unused CSS selectors in React and Angular components with real-time analysis and status bar integration",
   "version": "1.0.0",
   "icon": "icon.png",
-  "publisher": "Rajat-Malik",
+  "publisher": "RajatMalik",
   "author": {
     "name": "Rajat Malik",
     "email": "mr.rajatmalik@gmail.com",
