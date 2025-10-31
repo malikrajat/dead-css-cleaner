@@ -2,7 +2,7 @@ Option 1: Install the extension manually (Recommended)
 	Open VS Code
 	Go to Extensions view (Ctrl+Shift+X)
 	Click the "..." menu → "Install from VSIX..."
-	Select your unused-css-detector-0.0.1.vsix file
+	Select your dead-css-cleaner-0.0.1.vsix file
 	Reload VS Code
 Option 2: Change the publisher name
 	If you want to publish to the marketplace later, you'll need a valid publisher. Update your package.json:

@@ -14,7 +14,7 @@ This means the extension is not properly activated. Let's fix this step by step.
 
 ### **If not found**:
 - The extension might not be installed properly
-- Try reinstalling: `code --install-extension unused-css-detector-0.0.1.vsix`
+- Try reinstalling: `code --install-extension dead-css-cleaner-0.0.1.vsix`
 
 ## 📋 **Step 2: Check Extension Status**
 
@@ -69,7 +69,7 @@ This means the extension is not properly activated. Let's fix this step by step.
 ### **Open Developer Tools**:
 1. Help → Toggle Developer Tools
 2. Go to **Console** tab
-3. Look for error messages related to "unused-css-detector"
+3. Look for error messages related to "dead-css-cleaner"
 
 ### **Common errors**:
 - Module loading errors
@@ -81,7 +81,7 @@ This means the extension is not properly activated. Let's fix this step by step.
 ### **Check if extension files exist**:
 The extension should be installed in VS Code's extensions folder. The main file should be:
 ```
-~/.vscode/extensions/your-publisher-name.unused-css-detector-0.0.1/out/extension.js
+~/.vscode/extensions/your-publisher-name.dead-css-cleaner-0.0.1/out/extension.js
 ```
 
 ## 📋 **Step 7: Alternative Command Search**
@@ -116,7 +116,7 @@ code --list-extensions | grep unused-css
 ### **If not listed**:
 ```bash
 # Reinstall the extension
-code --install-extension unused-css-detector-0.0.1.vsix --force
+code --install-extension dead-css-cleaner-0.0.1.vsix --force
 ```
 
 ## 📋 **Step 10: Create Test Environment**
@@ -171,7 +171,7 @@ code test-extension
 code --disable-extensions
 
 # Enable only our extension
-code --enable-extension unused-css-detector
+code --enable-extension dead-css-cleaner
 ```
 
 ## 🚨 **If Still Not Working**
@@ -179,10 +179,10 @@ code --enable-extension unused-css-detector
 ### **Try complete reinstall**:
 ```bash
 # Uninstall
-code --uninstall-extension unused-css-detector
+code --uninstall-extension dead-css-cleaner
 
 # Reinstall
-code --install-extension unused-css-detector-0.0.1.vsix
+code --install-extension dead-css-cleaner-0.0.1.vsix
 
 # Restart VS Code completely
 ```
@@ -195,7 +195,7 @@ code --install-extension unused-css-detector-0.0.1.vsix
 ### **Alternative: Install from different location**:
 ```bash
 # Try installing with full path
-code --install-extension "C:\full\path\to\unused-css-detector-0.0.1.vsix"
+code --install-extension "C:\full\path\to\dead-css-cleaner-0.0.1.vsix"
 ```
 
 ## 📞 **Report Back**

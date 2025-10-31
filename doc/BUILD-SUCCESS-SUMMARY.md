@@ -6,14 +6,14 @@ Your VS Code extension has been successfully built and packaged!
 
 ## 📦 **What Was Created**
 
-### **Package File**: `unused-css-detector-0.0.1.vsix` (48.75 KB)
+### **Package File**: `dead-css-cleaner-0.0.1.vsix` (48.75 KB)
 - ✅ **26 files included** in the package
 - ✅ **47.61 KB total size** - Perfect size for marketplace
 - ✅ **All necessary files** included automatically
 
 ### **Package Contents**:
 ```
-unused-css-detector-0.0.1.vsix
+dead-css-cleaner-0.0.1.vsix
 ├── extension.js (45.97 KB)     ← Your compiled extension code
 ├── package.json (8.27 KB)     ← Extension manifest
 ├── README.md (4.48 KB)        ← Documentation
@@ -67,7 +67,7 @@ src/  →  dist/  →  Deploy dist/
 
 ### **1. Test Your Extension Locally**:
 ```bash
-code --install-extension unused-css-detector-0.0.1.vsix
+code --install-extension dead-css-cleaner-0.0.1.vsix
 ```
 
 ### **2. Publish to Marketplace** (when ready):
@@ -77,7 +77,7 @@ npm run publish
 
 ### **3. Share the .vsix File**:
 - Send the `.vsix` file to others for testing
-- They can install it with: `code --install-extension unused-css-detector-0.0.1.vsix`
+- They can install it with: `code --install-extension dead-css-cleaner-0.0.1.vsix`
 
 ## ✅ **Build System Status**
 

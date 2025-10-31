@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to the "unused-css-detector" extension will be documented in this file.
+All notable changes to the "dead-css-cleaner" extension will be documented in this file.
 
 ## [0.0.1] - 2024-10-31
 

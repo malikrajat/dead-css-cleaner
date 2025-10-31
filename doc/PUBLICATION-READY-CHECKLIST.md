@@ -84,7 +84,7 @@ vsce login your-publisher-name
 npm run package
 
 # Test the packaged extension
-code --install-extension unused-css-detector-0.0.1.vsix
+code --install-extension dead-css-cleaner-0.0.1.vsix
 
 # Publish to marketplace
 npm run publish

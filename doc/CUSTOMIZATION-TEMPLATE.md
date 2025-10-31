@@ -20,18 +20,18 @@ Before publishing, you MUST replace these placeholder values:
 
 ### 3. Repository URLs (Replace ALL instances of "your-username")
 ```json
-"homepage": "https://github.com/your-username/unused-css-detector#readme",
+"homepage": "https://github.com/your-username/dead-css-cleaner#readme",
 "repository": {
   "type": "git",
-  "url": "https://github.com/your-username/unused-css-detector.git"
+  "url": "https://github.com/your-username/dead-css-cleaner.git"
 },
 "bugs": {
-  "url": "https://github.com/your-username/unused-css-detector/issues"
+  "url": "https://github.com/your-username/dead-css-cleaner/issues"
 },
 "badges": [
   {
-    "url": "https://img.shields.io/github/license/your-username/unused-css-detector",
-    "href": "https://github.com/your-username/unused-css-detector/blob/main/LICENSE"
+    "url": "https://img.shields.io/github/license/your-username/dead-css-cleaner",
+    "href": "https://github.com/your-username/dead-css-cleaner/blob/main/LICENSE"
   }
 ],
 "sponsor": {
@@ -41,7 +41,7 @@ Before publishing, you MUST replace these placeholder values:
 
 ### 4. Test Files (Replace in src/test/suite/extension.test.ts)
 ```typescript
-assert.ok(vscode.extensions.getExtension('your-publisher-name.unused-css-detector'));
+assert.ok(vscode.extensions.getExtension('your-publisher-name.dead-css-cleaner'));
 ```
 
 ## Example Completed Values
@@ -56,13 +56,13 @@ Here's how it might look when properly filled out:
     "email": "john.smith@example.com",
     "url": "https://github.com/johnsmith"
   },
-  "homepage": "https://github.com/johnsmith/unused-css-detector#readme",
+  "homepage": "https://github.com/johnsmith/dead-css-cleaner#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/johnsmith/unused-css-detector.git"
+    "url": "https://github.com/johnsmith/dead-css-cleaner.git"
   },
   "bugs": {
-    "url": "https://github.com/johnsmith/unused-css-detector/issues"
+    "url": "https://github.com/johnsmith/dead-css-cleaner/issues"
   }
 }
 ```

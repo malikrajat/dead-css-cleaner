@@ -887,7 +887,7 @@ function createDiagnosticsWithTooltips(
             vscode.DiagnosticSeverity.Warning
         );
 
-        diagnostic.source = 'unused-css-detector';
+        diagnostic.source = 'dead-css-cleaner';
         diagnostic.code = 'unused-selector';
 
         // Add related information for better context

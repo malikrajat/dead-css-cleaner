@@ -1,23 +1,23 @@
 {
-  "name": "unused-css-detector",
-  "displayName": "Unused CSS Detector",
-  "description": "Detect unused CSS selectors in React and Angular components with real-time analysis and status bar integration",
+  "name": "dead-css-cleaner",
+  "displayName": "Dead CSS Cleaner",
+  "description": "Clean up dead CSS selectors from React and Angular projects with intelligent analysis and real-time detection",
   "version": "1.0.0",
   "icon": "icon.png",
   "publisher": "RajatMalik",
   "author": {
     "name": "Rajat Malik",
     "email": "mr.rajatmalik@gmail.com",
-    "url": "https://github.com/malikrajat/unused-css-detector"
+    "url": "https://github.com/malikrajat/dead-css-cleaner"
   },
   "license": "MIT",
-  "homepage": "https://github.com/malikrajat/unused-css-detector.git#readme",
+  "homepage": "https://github.com/malikrajat/dead-css-cleaner.git#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/malikrajat/unused-css-detector.git"
+    "url": "https://github.com/malikrajat/dead-css-cleaner.git"
   },
   "bugs": {
-    "url": "https://github.com/malikrajat/unused-css-detector/issues"
+    "url": "https://github.com/malikrajat/dead-css-cleaner/issues"
   },
   "keywords": [
     "css",
@@ -38,8 +38,8 @@
   },
   "badges": [
     {
-      "url": "https://img.shields.io/github/license/malikrajat/unused-css-detector",
-      "href": "https://github.com/malikrajat/unused-css-detector/blob/main/LICENSE",
+      "url": "https://img.shields.io/github/license/malikrajat/dead-css-cleaner",
+      "href": "https://github.com/malikrajat/dead-css-cleaner/blob/main/LICENSE",
       "description": "License"
     }
   ],

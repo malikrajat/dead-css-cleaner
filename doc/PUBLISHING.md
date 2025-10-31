@@ -34,7 +34,7 @@ npm run package
 
 ### 4. Test the Package
 ```bash
-code --install-extension unused-css-detector-0.0.1.vsix
+code --install-extension dead-css-cleaner-0.0.1.vsix
 ```
 
 ### 5. Publish to Marketplace

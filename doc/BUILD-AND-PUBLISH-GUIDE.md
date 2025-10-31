@@ -48,7 +48,7 @@ npm run install-vsce    # Install VS Code Extension CLI globally
 
 2. **`npm run package`**:
    ```
-   out/ + package.json + README.md  →  unused-css-detector-0.0.1.vsix
+   out/ + package.json + README.md  →  dead-css-cleaner-0.0.1.vsix
    ```
 
 3. **The `.vsix` file IS your distribution package** (not a dist folder)
@@ -70,11 +70,11 @@ This creates optimized JavaScript in the `out/` folder.
 ```bash
 npm run package
 ```
-This creates a `.vsix` file (e.g., `unused-css-detector-0.0.1.vsix`)
+This creates a `.vsix` file (e.g., `dead-css-cleaner-0.0.1.vsix`)
 
 ### **4. Test the Package Locally**
 ```bash
-code --install-extension unused-css-detector-0.0.1.vsix
+code --install-extension dead-css-cleaner-0.0.1.vsix
 ```
 
 ### **5. Publish to Marketplace**

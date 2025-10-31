@@ -5,11 +5,11 @@ suite('Extension Test Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
     test('Extension should be present', () => {
-        assert.ok(vscode.extensions.getExtension('unused-css-detector-dev.unused-css-detector'));
+        assert.ok(vscode.extensions.getExtension('dead-css-cleaner-dev.dead-css-cleaner'));
     });
 
     test('Extension should activate', async () => {
-        const extension = vscode.extensions.getExtension('unused-css-detector-dev.unused-css-detector');
+        const extension = vscode.extensions.getExtension('dead-css-cleaner-dev.dead-css-cleaner');
         if (extension) {
             await extension.activate();
             assert.ok(extension.isActive);

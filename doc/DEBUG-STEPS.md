@@ -8,7 +8,7 @@ I've updated the extension with debug logging. Here's how to troubleshoot:
 
 ```bash
 # Install the updated version with debug logging
-code --install-extension unused-css-detector-0.0.1.vsix
+code --install-extension dead-css-cleaner-0.0.1.vsix
 ```
 
 ## 📋 **Step 2: Enable Debug Console**
