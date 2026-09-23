@@ -1,0 +1,12 @@
+# Normalise line endings for every text file (Windows checkouts stay consistent).
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.vsix binary
+
+# Keep generated bundles out of diffs and language statistics.
+out/** -diff linguist-generated=true
+out-cli/** -diff linguist-generated=true
+package-lock.json -diff linguist-generated=true
