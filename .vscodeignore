@@ -1,16 +1,40 @@
+# --- Sources & build tooling ---
+# `dist/` (the shipped webpack bundle) is intentionally NOT ignored below.
+src/**
+scripts/**
+out/**
+out-cli/**
+webpack.config.js
+tsconfig.json
+biome.json
+.editorconfig
+.gitattributes
+.nvmrc
+package-lock.json
+.gitignore
+
+# --- Dependencies are bundled into dist/extension.js by webpack ---
+node_modules/**
+
+# --- Development / repository only ---
 .vscode/**
 .vscode-test/**
-src/**
-.gitignore
-.yarnrc
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/.eslintrc.json
+.github/**
+test-files/**
+doc/**
+images/**
+coverage/**
+*.vsix
+*.log
 **/*.map
 **/*.ts
-**/node_modules/**
-test-files/**
-.github/**
-*.vsix
-webpack.config.js
-.eslintrc.json
+
+# --- Community files (kept in git, not needed inside the VSIX) ---
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+SUPPORT.md
+
+# README.md, CHANGELOG.md, LICENSE, package.json, package.nls.json, icon.png and
+# media/walkthrough-*.md are intentionally NOT ignored: the Marketplace and the
+# built-in walkthrough need them.

@@ -1,28 +1,98 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "type": "npm",
-            "script": "compile",
-            "group": "build",
-            "presentation": {
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": "$tsc"
-        },
-        {
-            "type": "npm",
-            "script": "watch",
-            "group": "build",
-            "presentation": {
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": "$tsc-watch",
-            "isBackground": true
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm: build:dev",
+      "type": "npm",
+      "script": "build:dev",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$ts-webpack"
+    },
+    {
+      "label": "npm: build",
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": "$ts-webpack"
+    },
+    {
+      "label": "npm: watch",
+      "type": "npm",
+      "script": "watch",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": "$ts-webpack-watch",
+      "presentation": {
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "npm: compile:watch",
+      "type": "npm",
+      "script": "compile:watch",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": "$tsc-watch",
+      "presentation": {
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "npm: typecheck",
+      "type": "npm",
+      "script": "typecheck",
+      "group": "test",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "npm: check",
+      "type": "npm",
+      "script": "check",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "npm: check:write",
+      "type": "npm",
+      "script": "check:write",
+      "problemMatcher": []
+    },
+    {
+      "label": "npm: test:unit",
+      "type": "npm",
+      "script": "test:unit",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "npm: test:vscode",
+      "type": "npm",
+      "script": "test:vscode",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "npm: verify",
+      "type": "npm",
+      "script": "verify",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "npm: package",
+      "type": "npm",
+      "script": "package",
+      "problemMatcher": []
+    }
+  ]
 }
