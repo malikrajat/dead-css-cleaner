@@ -1,0 +1,83 @@
+name: Bug report (including false positives)
+description: Report a wrong result, a crash, or anything that does not behave as documented.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. False positives (a used class being flagged as dead) are treated as bugs - please include the CSS rule **and** the component/template snippet so it can be reproduced.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did the extension report, and what did you expect instead?
+      placeholder: ".card__title was reported as dead, but CardComponent.tsx uses it via clsx()."
+    validations:
+      required: true
+  - type: textarea
+    id: css
+    attributes:
+      label: CSS rule
+      render: css
+      placeholder: |
+        .card .card__title { font-weight: 600; }
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: Where is the class used?
+      description: Paste the component or template snippet that applies the class.
+      render: jsx
+    validations:
+      required: true
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      options:
+        - React
+        - Angular
+        - Vue
+        - Svelte
+        - Astro
+        - Plain HTML/CSS (SPA)
+        - Something else (describe below)
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Extension version, VS Code version and OS
+      placeholder: "dead-css-cleaner 1.2.0, VS Code 1.95.0, Windows 11"
+    validations:
+      required: true
+  - type: dropdown
+    id: analysis-mode
+    attributes:
+      label: unusedCssDetector.analysisMode
+      options:
+        - token (default)
+        - strict
+        - not sure
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output channel log or CLI output
+      description: |
+        Turn on `unusedCssDetector.debugLogging`, open the "Dead CSS Cleaner" output channel, and paste anything relevant.
+        If possible also paste `npm run analyze -- <folder> --json`.
+      render: text
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I can reproduce this on a project that is not private (or can share a minimal reproduction).
+          required: false

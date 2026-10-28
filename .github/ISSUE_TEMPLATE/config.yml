@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or usage help
+    url: https://github.com/malikrajat/dead-css-cleaner/discussions
+    about: Ask about configuration, workflows or behaviour before opening an issue.
+  - name: Security report
+    url: https://github.com/malikrajat/dead-css-cleaner/blob/main/SECURITY.md
+    about: Please report vulnerabilities privately instead of opening an issue.
+  - name: Documentation
+    url: https://github.com/malikrajat/dead-css-cleaner#readme
+    about: Quick start, settings reference and architecture notes.

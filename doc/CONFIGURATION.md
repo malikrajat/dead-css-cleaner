@@ -1,224 +1,276 @@
-# ⚙️ Configuration Guide
+# Configuration reference
 
-## Extension Settings
+Every setting lives under the `unusedCssDetector.` namespace. Open Settings (`Ctrl/Cmd + ,`), search for "dead css", or run *Dead CSS Cleaner: Open Settings*. Settings marked `scope: resource` can differ per workspace folder; `scope: window` settings are per window.
 
-The Unused CSS Detector extension can be customized through VS Code settings. Access these through:
-- **File > Preferences > Settings** (Windows/Linux)
-- **Code > Preferences > Settings** (macOS)
-- Search for "Unused CSS Detector"
+```jsonc
+// .vscode/settings.json
+{
+  "unusedCssDetector.analysisMode": "token",
+  "unusedCssDetector.autoAnalyze": true,
+  "unusedCssDetector.safelist": ["^js-", "btn-*"],
+  "unusedCssDetector.dynamicClassPatterns": ["item-", "col-"],
+  "unusedCssDetector.excludePatterns": ["**/node_modules/**", "**/dist/**", "**/generated/**"]
+}
+```
 
-## Available Settings
+---
+
+## Analysis
+
+### `unusedCssDetector.analysisMode`
+
+- Type: `string`, enum `token` or `strict`
+- Default: `token`
+- Scope: resource
+
+`token` reports every unused class/id and labels partially dead selectors (`.card .title` where `.card` is used but `.title` is not) as "partially dead". `strict` reports a selector only when **all** of its classes and ids are unused, which removes almost all nested-child noise at the cost of missing partially dead selectors.
+
+```jsonc
+{ "unusedCssDetector.analysisMode": "strict" }
+```
 
 ### `unusedCssDetector.autoAnalyze`
-- **Type**: `boolean`
-- **Default**: `true`
-- **Description**: Automatically analyze CSS when files are saved or opened
-- **Example**: 
-  ```json
-  "unusedCssDetector.autoAnalyze": false
-  ```
 
-### `unusedCssDetector.excludePatterns`
-- **Type**: `array` of `string`
-- **Default**: `["**/node_modules/**", "**/dist/**", "**/build/**", "**/.git/**"]`
-- **Description**: Glob patterns for files and directories to exclude from analysis
-- **Example**:
-  ```json
-  "unusedCssDetector.excludePatterns": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/coverage/**",
-    "**/.next/**",
-    "**/public/**"
-  ]
-  ```
+- Type: `boolean`, default `true`, scope: window
+
+Analyse after saving a relevant file, when switching files, when configuration changes, and when the file watcher notices creates or deletes. Turn it off to analyse only on demand.
+
+### `unusedCssDetector.componentScope`
+
+- Type: `string`, enum `tree`, `component` or `off`
+- Default: `tree`
+- Scope: resource
+
+How far the "is this used?" check follows **child components**. Stylesheets are matched to the component that declares them (`styleUrls`, CSS imports, `.vue`/`.svelte`/`.astro` styles), and the classes are then validated against that component's tree.
+
+| Value | Behaviour |
+| --- | --- |
+| `tree` (default) | Owner component + every descendant component + their templates. A parent class applied by a grandchild is not dead. |
+| `component` | Owner component + direct children only. Deeper usage is reported as "used elsewhere" instead of dead. |
+| `off` | Pre-1.4 behaviour: any usage anywhere in the workspace counts as used. |
+
+Tokens that are used in the workspace but **only outside** the owner's tree are never diagnostics - they appear in the component report and the sidebar under "used elsewhere", which normally means the rule belongs to another component.
+
+Stylesheets that no component owns (a global `styles.css`, a plain SPA's `index.html` styles) always use whole-workspace matching.
+
+```jsonc
+{ "unusedCssDetector.componentScope": "tree" }
+```
+
+### Reporting the results per component
+
+- **Dead CSS by component** (activity bar) lists component → dead class with the nested selector chain and the scope that was checked.
+- *Dead CSS Cleaner: Show Dead CSS Report (grouped by component)* writes the same information as Markdown, including a "used elsewhere" section and the component graph.
+- *Dead CSS Cleaner: Copy Dead CSS List* copies `file:line  .class  (selector: ...)` lines.
+
+### `unusedCssDetector.analyzeIds`
+
+- Type: `boolean`, default `true`, scope: resource
+
+Include `#id` selectors. Ids are matched per type, with a cross-type safety net: `#nav` is also considered used when code contains `class="nav"`.
+
+### `unusedCssDetector.analyzeElements`
+
+- Type: `boolean`, default `false`, scope: resource, tag: experimental
+
+Also report element-only selectors such as `article {}` when the tag never appears in any scanned template. Off by default because global element styling is normal.
+
+### `unusedCssDetector.severity`
+
+- Type: `string`, enum `information`, `warning` or `error`, default `warning`, scope: resource
+
+Problems panel severity for findings.
+
+### `unusedCssDetector.tagUnnecessary`
+
+- Type: `boolean`, default `false`, scope: resource
+
+Tag findings as "unnecessary" (dimmed) instead of a plain warning.
+
+### `unusedCssDetector.maxUsageLocations`
+
+- Type: `number`, default `5`, range 1-50, scope: resource
+
+How many usage locations to keep per token. They appear as clickable related information in the Problems panel.
+
+---
+
+## Files
 
 ### `unusedCssDetector.includeFileTypes`
-- **Type**: `array` of `string`
-- **Default**: `[".css", ".scss", ".less"]`
-- **Description**: CSS file extensions to analyze
-- **Example**:
-  ```json
-  "unusedCssDetector.includeFileTypes": [
-    ".css",
-    ".scss",
-    ".sass",
-    ".less",
-    ".stylus"
-  ]
-  ```
+
+- Type: `string[]`, default `[".css", ".scss", ".less", ".sass"]`, scope: resource
+
+Stylesheet extensions to analyse. `<style>` blocks inside template files are analysed even when their extension is not listed here.
 
 ### `unusedCssDetector.componentFileTypes`
-- **Type**: `array` of `string`
-- **Default**: `[".jsx", ".tsx", ".ts", ".js"]`
-- **Description**: Component file extensions to scan for CSS usage
-- **Example**:
-  ```json
-  "unusedCssDetector.componentFileTypes": [
-    ".jsx",
-    ".tsx",
-    ".ts",
-    ".js",
-    ".vue",
-    ".svelte"
-  ]
-  ```
 
-### `unusedCssDetector.showStatusBar`
-- **Type**: `boolean`
-- **Default**: `true`
-- **Description**: Show unused CSS count in status bar
-- **Example**:
-  ```json
-  "unusedCssDetector.showStatusBar": false
-  ```
+- Type: `string[]`, default `[".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".mts", ".cts", ".vue", ".svelte", ".astro"]`, scope: resource
 
-### `unusedCssDetector.showNotifications`
-- **Type**: `boolean`
-- **Default**: `true`
-- **Description**: Show notification messages when analysis completes
-- **Example**:
-  ```json
-  "unusedCssDetector.showNotifications": false
-  ```
+Files scanned for class usage. Single-file components such as `.vue` are parsed as both script and markup.
+
+### `unusedCssDetector.markupFileTypes`
+
+- Type: `string[]`, default `[".html", ".htm", ".vue", ".svelte", ".astro", ".php", ".erb", ".hbs", ".handlebars", ".twig", ".ejs", ".cshtml", ".razor", ".mdx", ".aspx", ".jsp"]`, scope: resource
+
+Template files scanned for `class`, `className`, `id` and framework bindings.
+
+### `unusedCssDetector.excludePatterns`
+
+- Type: `string[]`, default `["**/node_modules/**", "**/dist/**", "**/build/**", "**/out/**", "**/.git/**", "**/coverage/**", "**/.next/**", "**/.nuxt/**", "**/.angular/**", "**/.svelte-kit/**", "**/vendor/**", "**/*.min.css", "**/*.d.ts"]`, scope: resource
+
+Glob patterns for files and folders to skip entirely. Narrow these rather than disabling them: excluding a source folder makes every class in it look unused.
 
 ### `unusedCssDetector.minFilesForAnalysis`
-- **Type**: `number`
-- **Default**: `1`
-- **Minimum**: `1`
-- **Description**: Minimum number of CSS files required to trigger analysis
-- **Example**:
-  ```json
-  "unusedCssDetector.minFilesForAnalysis": 3
-  ```
 
-### `unusedCssDetector.debounceDelay`
-- **Type**: `number`
-- **Default**: `500`
-- **Range**: `0` to `5000`
-- **Description**: Delay in milliseconds before analyzing after file changes
-- **Example**:
-  ```json
-  "unusedCssDetector.debounceDelay": 1000
-  ```
+- Type: `number`, default `1`, minimum 1, scope: resource
 
-## Configuration Examples
+Minimum number of style-bearing files before an analysis runs. Raise it to avoid analysing tiny folders.
 
-### Minimal Configuration (Performance Focused)
-```json
+---
+
+## False-positive control
+
+### `unusedCssDetector.ignoreSelectors`
+
+- Type: `string[]` of regular expressions, default `[]`, scope: resource
+
+Selectors or token names matching any pattern are never reported. Useful for legacy or theme styles.
+
+```jsonc
+{ "unusedCssDetector.ignoreSelectors": ["^legacy-", "^theme-", "\\.old-"] }
+```
+
+### `unusedCssDetector.safelist`
+
+- Type: `string[]` of regular expressions or `prefix*` patterns, default `[]`, scope: resource
+
+Classes matching any pattern are always treated as used.
+
+```jsonc
+{ "unusedCssDetector.safelist": ["^js-", "btn-*", "^animate-"] }
+```
+
+### `unusedCssDetector.dynamicClassPatterns`
+
+- Type: `string[]` of prefixes or regular expressions, default `[]`, scope: resource
+
+Extra prefixes for classes assembled at runtime. The extension already detects `` `item-${size}` ``, `'btn-' + size`, `[class*="col-"]` and `class="chip chip--{{ size }}"` automatically; add this when a name is built in a way the parser cannot see, for example inside a helper library.
+
+```jsonc
+{ "unusedCssDetector.dynamicClassPatterns": ["item-", "col-", "is-", "has-"] }
+```
+
+### `unusedCssDetector.ignoreComment`
+
+- Type: `string`, default `dead-css-ignore`, scope: resource
+
+Change the comment marker if `dead-css-ignore` collides with another tool.
+
+```css
+/* dead-css-ignore */
+.kept-on-purpose { color: red; }
+
+/* dead-css-ignore-file */
+```
+
+---
+
+## Performance
+
+| Setting | Default | Range | Purpose |
+| --- | --- | --- | --- |
+| `unusedCssDetector.enableCaching` | `true` | - | Cache parse results per file, invalidated on change |
+| `unusedCssDetector.cacheTimeout` | `300000` | 0-1800000 | Cache TTL in ms; `0` disables time-based expiry |
+| `unusedCssDetector.debounceDelay` | `600` | 0-10000 | Wait after a file change before analysing |
+| `unusedCssDetector.maxConcurrentFiles` | `12` | 1-64 | Files per processing batch |
+| `unusedCssDetector.largeProjectThreshold` | `150` | 10-5000 | File count above which progress notices appear |
+| `unusedCssDetector.enableFileWatcher` | `true` | - | React to created, changed and deleted files |
+| `unusedCssDetector.watcherThrottleDelay` | `2000` | 200-60000 | Watcher throttle in ms |
+| `unusedCssDetector.maxCssFileSizeKb` | `5120` | 64-51200 | Skip larger stylesheets |
+| `unusedCssDetector.maxSourceFileSizeKb` | `2048` | 64-51200 | Skip larger source files |
+| `unusedCssDetector.debugLogging` | `false` | - | Verbose output channel logging |
+
+---
+
+## Interface
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `unusedCssDetector.showStatusBar` | `true` | Show the dead selector count in the status bar |
+| `unusedCssDetector.showNotifications` | `true` | Notify when analysis finishes |
+
+---
+
+## Recipes
+
+### Large monorepo (fast and quiet)
+
+```jsonc
 {
+  "unusedCssDetector.analysisMode": "strict",
   "unusedCssDetector.autoAnalyze": false,
-  "unusedCssDetector.showNotifications": false,
-  "unusedCssDetector.debounceDelay": 2000,
-  "unusedCssDetector.minFilesForAnalysis": 5
-}
-```
-
-### Comprehensive Configuration (Full Coverage)
-```json
-{
-  "unusedCssDetector.autoAnalyze": true,
   "unusedCssDetector.excludePatterns": [
     "**/node_modules/**",
     "**/dist/**",
     "**/build/**",
-    "**/coverage/**",
-    "**/.next/**",
-    "**/public/**",
-    "**/vendor/**"
-  ],
-  "unusedCssDetector.includeFileTypes": [
-    ".css",
-    ".scss",
-    ".sass",
-    ".less"
-  ],
-  "unusedCssDetector.componentFileTypes": [
-    ".jsx",
-    ".tsx",
-    ".ts",
-    ".js",
-    ".vue"
-  ],
-  "unusedCssDetector.showStatusBar": true,
-  "unusedCssDetector.showNotifications": true,
-  "unusedCssDetector.minFilesForAnalysis": 1,
-  "unusedCssDetector.debounceDelay": 500
-}
-```
-
-### Large Project Configuration
-```json
-{
-  "unusedCssDetector.autoAnalyze": true,
-  "unusedCssDetector.excludePatterns": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/coverage/**",
     "**/storybook-static/**",
-    "**/e2e/**",
-    "**/cypress/**"
+    "**/generated/**"
   ],
-  "unusedCssDetector.debounceDelay": 2000,
-  "unusedCssDetector.minFilesForAnalysis": 3,
-  "unusedCssDetector.showNotifications": false
+  "unusedCssDetector.maxConcurrentFiles": 24
 }
 ```
 
-## Workspace vs User Settings
+Run *Analyze Workspace for Dead CSS* when you want a report. Stale runs are cancelled automatically, so repeated runs stay cheap.
 
-### User Settings (Global)
-Apply to all VS Code workspaces:
-```json
+### Angular with SCSS and dynamic classes
+
+```jsonc
 {
-  "unusedCssDetector.showStatusBar": true,
-  "unusedCssDetector.showNotifications": false
+  "unusedCssDetector.analysisMode": "strict",
+  "unusedCssDetector.dynamicClassPatterns": ["is-", "has-", "theme-"],
+  "unusedCssDetector.ignoreSelectors": ["^ng-", "^cdk-"]
 }
 ```
 
-### Workspace Settings (Project-specific)
-Create `.vscode/settings.json` in your project:
-```json
+Backtick inline templates, `templateUrl`, `host` bindings and `@HostBinding('class.x')` are handled automatically.
+
+### React with CSS modules and clsx
+
+```jsonc
 {
-  "unusedCssDetector.excludePatterns": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/my-custom-build/**"
-  ],
-  "unusedCssDetector.debounceDelay": 1000
+  "unusedCssDetector.analysisMode": "token",
+  "unusedCssDetector.safelist": ["^js-"]
 }
 ```
 
-## Performance Tips
+`styles.foo`, `styles['foo']`, `clsx`, `cx`, `classnames`, ternaries, `&&`, arrays and objects are understood.
 
-### For Large Projects
-- Increase `debounceDelay` to reduce frequent analysis
-- Set `minFilesForAnalysis` higher to skip small projects
-- Add more specific `excludePatterns`
-- Disable `showNotifications` to reduce interruptions
+### Plain SPA (index.html plus styles.css)
 
-### For Small Projects
-- Keep default settings for responsive analysis
-- Enable `showNotifications` for immediate feedback
-- Lower `debounceDelay` for faster response
+No configuration is required. Add more template extensions if your markup uses a different suffix:
 
-## Troubleshooting
+```jsonc
+{ "unusedCssDetector.markupFileTypes": [".html", ".htm", ".njk", ".liquid"] }
+```
 
-### Extension Not Working?
-1. Check if `autoAnalyze` is enabled
-2. Verify file types are included in `includeFileTypes` and `componentFileTypes`
-3. Check if files are excluded by `excludePatterns`
-4. Ensure minimum file count is met (`minFilesForAnalysis`)
+### Styles kept for external consumers
 
-### Performance Issues?
-1. Increase `debounceDelay`
-2. Add more exclusion patterns
-3. Increase `minFilesForAnalysis`
-4. Disable `autoAnalyze` and use manual analysis
+```jsonc
+{
+  "unusedCssDetector.safelist": ["^public-", "^embed-"],
+  "unusedCssDetector.ignoreSelectors": ["^\\.legacy-"]
+}
+```
 
-### Status Bar Not Showing?
-1. Check `showStatusBar` setting
-2. Restart VS Code after changing settings
-3. Verify extension is active
+### Vue, Svelte and Astro single-file components
+
+Nothing to configure. The analyzer parses the markup, the script block and the `<style>` block of the same file, and positions inside `<style>` stay correct.
+
+### Suppress an entire file
+
+```css
+/* dead-css-ignore-file */
+```
+
+Place it anywhere in the stylesheet, for example as the first line of a vendor override file.

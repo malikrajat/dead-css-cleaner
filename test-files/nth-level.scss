@@ -1,0 +1,34 @@
+/* SCSS nesting + BEM + deep descendants (the "child / nth level child" case) */
+
+.card {
+    display: block;
+
+    &__header {
+        display: flex;
+
+        .card__title {
+            font-weight: 600;
+        }
+
+        .card__icon {
+            width: 16px;
+        }
+    }
+
+    .card__body {
+        padding: 8px;
+
+        .card__text {
+            line-height: 1.4;
+        }
+
+        /* dead: never used by the component */
+        .card__legacy-note {
+            color: #999;
+        }
+    }
+}
+
+.card--compact .card__header .card__title .card__badge {
+    margin-left: 4px; /* dead: .card__badge is never rendered */
+}

@@ -1,0 +1,52 @@
+name: Feature request
+description: Suggest a new framework, syntax, setting or workflow improvement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        New framework and syntax support is very welcome. If you can share a small example of how classes are applied, it can usually be implemented quickly.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - New framework or template syntax
+        - Detection accuracy (false positives / false negatives)
+        - New setting or configuration
+        - Commands, quick fixes or UI
+        - Performance
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation where the extension does not help today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+      description: If this is about a new syntax, include a code sample.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you have considered
+      description: Workarounds, other tools, or manual processes.
+    validations:
+      required: false
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a pull request for this (see CONTRIBUTING.md).
+          required: false

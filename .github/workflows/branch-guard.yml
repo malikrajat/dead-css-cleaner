@@ -1,0 +1,83 @@
+# Reusable branch guard.
+#
+# Every other workflow in this repository calls this file as its first job, so a
+# run can only proceed when it is:
+#   * a push to the allowed branch (default: main), or
+#   * a tag whose commit is contained in the allowed branch, or
+#   * a manual dispatch from the allowed branch.
+#
+# To allow a different branch, change the default of `allowedBranch` below (one
+# place) and update the `on.push.branches` filters in the caller workflows. See
+# GITHUB-ACTIONS.md in the repository root.
+name: Branch guard
+
+on:
+  workflow_call:
+    inputs:
+      allowedBranch:
+        description: Branch that may trigger workflows, and that release tags must point at
+        required: false
+        type: string
+        default: main
+    outputs:
+      allowed:
+        description: "true when the run is allowed to continue"
+        value: ${{ jobs.guard.outputs.allowed }}
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Guard (${{ inputs.allowedBranch }} only)
+    runs-on: ubuntu-latest
+    outputs:
+      allowed: ${{ steps.check.outputs.allowed }}
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enforce the branch rule
+        id: check
+        shell: bash
+        env:
+          ALLOWED_BRANCH: ${{ inputs.allowedBranch }}
+        run: |
+          set -euo pipefail
+          allowed="false"
+          reason=""
+
+          case "${GITHUB_REF_TYPE}" in
+            branch)
+              if [ "${GITHUB_REF_NAME}" = "${ALLOWED_BRANCH}" ]; then
+                allowed="true"
+              else
+                reason="pushed to branch '${GITHUB_REF_NAME}'"
+              fi
+              ;;
+            tag)
+              git fetch --no-tags origin "+refs/heads/${ALLOWED_BRANCH}:refs/remotes/origin/${ALLOWED_BRANCH}" >/dev/null 2>&1 || true
+              if git rev-parse --verify --quiet "refs/remotes/origin/${ALLOWED_BRANCH}" >/dev/null; then
+                if git merge-base --is-ancestor "${GITHUB_SHA}" "refs/remotes/origin/${ALLOWED_BRANCH}"; then
+                  allowed="true"
+                else
+                  reason="tag '${GITHUB_REF_NAME}' does not point at a commit on '${ALLOWED_BRANCH}'"
+                fi
+              else
+                reason="could not read origin/${ALLOWED_BRANCH} to verify tag '${GITHUB_REF_NAME}'"
+              fi
+              ;;
+            *)
+              reason="ref type '${GITHUB_REF_TYPE}' (${GITHUB_REF_NAME}) is not allowed"
+              ;;
+          esac
+
+          if [ "${allowed}" != "true" ]; then
+            echo "::error title=Blocked by branch guard::${GITHUB_WORKFLOW} may only run on '${ALLOWED_BRANCH}' or on a tag created from '${ALLOWED_BRANCH}'. Blocked because: ${reason}. See GITHUB-ACTIONS.md to change this rule."
+            exit 1
+          fi
+
+          echo "allowed=true" >> "${GITHUB_OUTPUT}"
+          echo "Allowed: ${GITHUB_REF_TYPE} '${GITHUB_REF_NAME}' (rule: ${ALLOWED_BRANCH} only)"

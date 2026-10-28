@@ -1,0 +1,38 @@
+/* Plain SPA stylesheet: nested descendants, all levels should be understood */
+
+:root {
+    --brand: #0b5cad;
+}
+
+/* Five levels deep - every level is used in index.html */
+.app-shell .site-header .nav .nav-list .nav-item .nav-link {
+    color: var(--brand);
+}
+
+.hero {
+    padding: 2rem;
+}
+
+/* Parent + grandchild used, middle level not needed */
+.hero .hero__title .hero__badge {
+    background: gold;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+/* ---- dead below this line ---- */
+
+.dead-widget {
+    display: none;
+}
+
+/* child token never used in markup */
+.hero .hero__subtitle {
+    font-size: 0.9rem;
+}
+
+#dead-anchor {
+    color: red;
+}

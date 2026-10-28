@@ -1,2 +1,27 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4,
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit"
+  },
+  "search.exclude": {
+    "dist": true,
+    "out": true,
+    "out-cli": true,
+    "coverage": true,
+    "node_modules": true,
+    "**/*.vsix": true
+  },
+  "files.watcherExclude": {
+    "**/dist/**": true,
+    "**/out/**": true,
+    "**/out-cli/**": true,
+    "**/node_modules/**": true
+  }
 }
