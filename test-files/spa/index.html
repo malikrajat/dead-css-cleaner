@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>SPA demo (index.html + styles.css, no framework)</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div id="app" class="app-shell">
+        <header class="site-header">
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item nav-item--active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="page">
+            <section class="hero inline-used">
+                <h1 class="hero__title">
+                    Hello <span class="hero__badge">new</span>
+                </h1>
+            </section>
+        </main>
+    </div>
+
+    <style>
+        .inline-used {
+            color: rebeccapurple;
+        }
+
+        .inline-dead {
+            color: tomato;
+        }
+    </style>
+</body>
+</html>

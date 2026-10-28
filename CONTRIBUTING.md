@@ -82,6 +82,7 @@ Open the folder in VS Code and press `F5`. This launches an Extension Developmen
 | `npm run test:vscode` | Integration tests in a downloaded VS Code instance |
 | `npm run verify` | Manifest + Biome + type check + unit tests (run this before pushing) |
 | `npm run verify:manifest` | Marketplace and manifest pre-flight checks |
+| `npm run verify:guard` | Proves the CI branch guard allows main/main-tags and blocks everything else |
 | `npm run analyze -- <folder>` | Standalone CLI using the real pipeline |
 | `npm run package` | Build a `.vsix` |
 | `npm run optimize:icon` | Re-generate `icon.png` from `images/icon-source.png` |
@@ -232,6 +233,7 @@ Continuous integration (`.github/workflows/ci.yml`) runs one job per step, so a 
 
 | Job | Command |
 | --- | --- |
+| Branch guard (`branch-guard.yml`) | Blocks any run that is not from `main` or a main-derived tag |
 | Manifest and Marketplace rules | `npm run verify:manifest` |
 | Lint | `npm run lint` |
 | Format check | `npm run format:check` |
@@ -239,9 +241,21 @@ Continuous integration (`.github/workflows/ci.yml`) runs one job per step, so a 
 | Unit tests (7-way matrix, one job per module) | `npm run test:unit:<module>` |
 | Coverage | `npm run test:coverage` |
 | Integration tests (Ubuntu + Windows matrix) | `npm run test:vscode` |
-| Build | `npm run build` (uploads the `dist/` artifact) |
-| Package | `npm run package` (uploads the VSIX artifact) |
+| Build | `npm run build` (verifies the `dist/` bundle in place) |
+| Package | `npm run package` (verifies the VSIX in place) |
 | CodeQL (separate workflow) | `javascript-typescript` and `actions` analysis |
+
+The workflows deliberately store **no artifacts**: nothing is uploaded with
+`actions/upload-artifact`, and release runs do not attach binaries to the GitHub release.
+Build, coverage and packaging are verified in the job logs and then discarded, so a run
+leaves no downloadable files behind. The only caches in play are the standard `setup-node`
+npm cache, which GitHub expires automatically.
+
+**Branch policy:** workflows run only from `main` and from tags whose commit is on `main`.
+Push filters handle the trigger side, and the reusable guard job
+`.github/workflows/branch-guard.yml` handles tags and manual dispatches. To allow another
+branch, follow [GITHUB-ACTIONS.md](GITHUB-ACTIONS.md) - the rule lives in one file, and
+`npm run verify:manifest` fails if a workflow drifts from it.
 
 ---
 

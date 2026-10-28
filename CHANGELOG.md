@@ -4,6 +4,79 @@ All notable changes to **Dead CSS Cleaner** are documented here.
 The project follows [Semantic Versioning](https://semver.org/) and the
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [Unreleased]
+
+### Added
+
+- [GITHUB-ACTIONS.md](GITHUB-ACTIONS.md) - the CI branch policy and a step-by-step guide for
+  pointing it at a different branch.
+- `.github/workflows/branch-guard.yml` - a reusable guard job that every other workflow calls
+  as its first job.
+
+### Changed
+
+- Workflows now run **only from `main`** (pushes and manual dispatches) and from tags whose
+  commit is on `main`. Push filters were narrowed and the `pull_request` triggers were
+  removed, so no other branch can start a workflow.
+- The guard verifies release tags with `git merge-base --is-ancestor` against `origin/main`,
+  so a tag created from a side branch cannot publish.
+- `npm run verify:manifest` now enforces the branch policy as well: it fails on a
+  `pull_request` trigger, on a `push` branch other than the allowed one, on a workflow that
+  skips the guard, and if the guard loses its tag check.
+- `npm run verify:guard` verifies the guard end to end in a throwaway git repository
+  (main and tag-on-main allowed, feature branch and tag-on-side-branch blocked) and runs as
+  part of `npm run verify`.
+
+## [1.4.0] - 2026-09-25
+
+The extension no longer only counts dead CSS - it now tells you **which classes are dead,
+per component**, and it validates every token against the component's **child components**
+before calling it dead.
+
+### Added
+
+- **Per-component dead CSS report** (`Dead CSS Cleaner: Show Dead CSS Report (grouped by
+  component)`). It groups findings by the component that owns the stylesheet, shows the
+  **full nested selector chain** (`.card .card__body .card__legacy-note`), the dead token,
+  whether the selector is fully or partially dead, and what scope was searched. It also
+  lists "used elsewhere" classes and a component-graph table.
+- **Component-scoped validation.** Stylesheets are matched to the component that declares
+  them (Angular `styleUrls`, React CSS imports, Vue/Svelte/Astro `<style>` blocks) and
+  class usage is then checked in that component **plus its child components, however deep**.
+  A parent class that a child component applies is no longer reported as dead.
+- **"Used elsewhere" classification** for tokens that exist in the workspace but are not
+  used by the owning component's tree. They are not dead code, so they are never
+  diagnostics - they appear in the report and in the sidebar as "used elsewhere", which
+  usually means the rule should move.
+- **Dead CSS sidebar view** (activity bar, "Dead CSS by component") listing component →
+  dead class, with the selector chain, the checked scope and the files where a token is
+  used elsewhere. Row actions: reveal, remove this selector, ignore this selector.
+- **`Dead CSS Cleaner: Copy Dead CSS List`** - a flat, copy-friendly list
+  (`file:line  .class  (selector: ...)`) for tickets, chat or commit messages.
+- **Component graph**: `componentGraph.ts` resolves owner edges (which component declares
+  which stylesheet) and child edges (Angular selectors, JSX component usage, relative
+  imports, Vue/Svelte component tags), cycle-safe and depth-unlimited.
+- **`unusedCssDetector.componentScope`** setting: `tree` (default, owner + all
+  descendants), `component` (owner + direct children) or `off` (whole-workspace matching,
+  the pre-1.4 behaviour).
+- Diagnostics, hover text and the report now state the validated scope, for example
+  "Checked: Card + 3 child file(s) (5 files searched)".
+- 22 new unit tests (119 total) covering the graph, scope resolution, "used elsewhere"
+  classification and the report builder, plus three new VS Code integration tests
+  (report content, clipboard list, scope explanation in diagnostics).
+- `test:unit:components` module script and a matching CI matrix entry.
+
+### Fixed
+
+- A leaf component that owns no stylesheet was dropped from the graph, so a parent
+  rendering it could not resolve the child and would have mis-classified the parent's
+  classes. Every file now stays resolvable; only real components appear in the summary.
+- `descendantsOf()` returned lower-cased paths, which made scope membership
+  case-sensitive in a surprising way. It now returns the original paths, and scope
+  matching normalises both sides once per scope.
+- A component's own template file (Angular `templateUrl`) is now part of its scope, so
+  classes used in the template are never mis-reported.
+
 ## [1.3.0] - 2026-09-22
 
 Developer-experience release: Biome for linting and formatting, a `dist/` build
@@ -147,5 +220,6 @@ real edge-case handling, and makes every failure path recoverable.
 
 [1.2.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.1.0...v1.2.0
 [1.3.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.2.0...v1.3.0
+[1.4.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.3.0...v1.4.0
 [1.1.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v0.0.1...v1.1.0
 [0.0.1]: https://github.com/malikrajat/dead-css-cleaner/releases/tag/v0.0.1

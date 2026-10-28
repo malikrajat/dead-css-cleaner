@@ -59,6 +59,8 @@ This page explains how the extension is put together, which rules the code follo
 | --- | --- |
 | `analyzer.ts` | File discovery, per-file parse planning, batching (`maxConcurrentFiles`), cache use, cancellation of stale runs, statistics, result assembly. |
 | `usageIndex.ts` | `UsageIndex` (fast token lookup with exact, cross-type, dynamic, safelist and element matching), `computeUnused()` (token versus strict mode) and element comparison. |
+| `componentGraph.ts` | Owner edges (which component declares which stylesheet) and child edges (Angular selectors, JSX usage, relative imports), plus `scopeFor(styleFile)` - the set of files that may legitimately use a stylesheet's classes. Cycle-safe and depth-unlimited. |
+| `graphBuilder.ts` | Pure conversion from parsed file results to graph inputs, plus relative-import resolution against the discovered file set. Shared by the analyzer and the unit tests. |
 
 ### Activation layer and `src/features`
 
@@ -71,6 +73,8 @@ This page explains how the extension is put together, which rules the code follo
 | `hoverProvider.ts` | Explains why a selector was flagged, including partial-selector details. |
 | `statusBar.ts` | Status bar states (idle, analysing, failed) and tooltips with scan statistics. |
 | `reportText.ts`, `report.ts` | Pure Markdown/JSON report builders, plus the VS Code code that writes and opens them. |
+| `componentReport.ts` | Group findings by owning component, render the per-component Markdown report and the flat copy list, and describe the validated scope. |
+| `deadCssTreeView.ts` | Sidebar view: component → dead class → selector chain, scope and "used elsewhere" files, with reveal/remove/ignore actions. |
 
 ---
 
@@ -81,8 +85,28 @@ This page explains how the extension is put together, which rules the code follo
 - Files are processed in batches. For each file the analyzer decides what to run based on its extension: CSS parse, style-block parse, JS usage parse, markup parse, Angular parse - or several of them for single-file components.
 - Results are cached per file by modification time and size, so unchanged files are not re-parsed.
 - All usages go into a `UsageIndex`; dynamic prefixes gathered from CSS, templates and scripts configure the pattern matcher.
-- `computeUnused()` compares each selector token against the index. In `token` mode a partially used selector produces findings only for its dead tokens; in `strict` mode the selector is skipped unless everything is dead.
+- Parsed files become component-graph inputs: stylesheets they declare, templates they render, tags they use and modules they import. `ComponentGraph` resolves owner edges, child edges and, for every stylesheet, the scope of files that may use its classes.
+- `computeUnused()` compares each selector token against the index **inside that scope**. In `token` mode a partially used selector produces findings only for its dead tokens; in `strict` mode the selector is skipped unless everything is dead. Tokens used only outside the scope become `outsideScope` entries rather than findings.
 - `ExtensionState` converts findings into diagnostics, updates the status bar and shows a notification; `features/report.ts` can export the same data.
+
+### Scope resolution
+
+```text
+CardComponent.ts (styleUrls: card.component.scss, template: card.component.html)
+  |
+  +-- owns ----> card.component.scss
+  |
+  +-- renders --> <app-card-body> --> CardBodyComponent.ts
+                                        |
+                                        +-- renders --> <app-card-footer> --> CardFooterComponent.ts
+
+scope(card.component.scss) with componentScope=tree
+  = { CardComponent.ts, card.component.html,
+      CardBodyComponent.ts, card-body.component.html,
+      CardFooterComponent.ts, card-footer.component.html }
+```
+
+Child edges come from three sources, whichever applies: Angular `selector:` values matched against template tags, JSX/Vue/Svelte component tags matched by normalised name (`CardBody`, `card-body`, `app-card-body`), and relative imports that resolve to a known component file. A stylesheet with no owner keeps global (whole-workspace) matching, so plain SPA projects and global theme files behave exactly as before.
 
 ---
 
@@ -94,6 +118,7 @@ This page explains how the extension is put together, which rules the code follo
 - **Every detection carries a real position.** Diagnostics must underline the exact token, not the start of the rule. `LineIndex`, PostCSS `source.start.offset` and Babel `loc` provide the mapping; masked-file tricks keep positions valid for `<style>` blocks and inline templates.
 - **Findings are explainable.** A diagnostic states the token, the selector, whether the selector is partially or fully dead, how many files were scanned, and where the token is still used when applicable.
 - **Runs are isolated.** Analyses are numbered; a run that finishes after a newer one started is discarded instead of overwriting fresher diagnostics.
+- **Scope matching is path-shape agnostic.** Paths are compared case- and separator-insensitively, and a scope's normalised lookup is built once per scope rather than per token.
 
 ---
 
@@ -139,6 +164,10 @@ Any new parser needs at least one fixture in `test-files/` and one unit test. Ne
 | Manifest and Marketplace pre-flight | `scripts/verify-manifest.js` | Plain Node (`npm run verify:manifest`) |
 
 CI (`.github/workflows/ci.yml`) runs one job per step: manifest, lint, format, type check, a seven-way unit-test matrix, coverage, integration tests on Ubuntu and Windows, the `dist/` build, VSIX packaging, and a summary job. `.github/workflows/codeql.yml` adds static security analysis.
+
+CI stores **no artifacts**: there are no `actions/upload-artifact` steps, no `download-artifact` steps, and release runs do not attach binaries to GitHub releases. Each job verifies its output (bundle, coverage, VSIX) in place and prints the evidence to the job log; the previous artifact steps were removed deliberately. The only persisted state is the standard `setup-node` npm cache.
+
+Workflows also run **only from `main`**: `on.push.branches` filters the triggers, and every job depends on the reusable `branch-guard.yml` job, which also verifies that a release tag points at a commit contained in `main`. The policy, and how to point it at another branch, is documented in [../GITHUB-ACTIONS.md](../GITHUB-ACTIONS.md) and enforced by `npm run verify:manifest`.
 
 ---
 

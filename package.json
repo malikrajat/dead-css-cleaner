@@ -1,39 +1,71 @@
 {
+  "$schema": "https://json.schemastore.org/vscode-extension-manifest.json",
   "name": "dead-css-cleaner",
-  "displayName": "Dead CSS Cleaner",
-  "description": "Clean up dead CSS selectors from React and Angular projects with intelligent analysis and real-time detection",
-  "version": "1.0.1",
-  "icon": "icon.png",
+  "displayName": "%displayName%",
+  "description": "%description%",
+  "version": "1.4.0",
   "publisher": "RajatMalik",
+  "license": "MIT",
+  "icon": "icon.png",
+  "preview": false,
   "author": {
     "name": "Rajat Malik",
-    "email": "mr.rajatmalik@gmail.com",
-    "url": "https://github.com/malikrajat/dead-css-cleaner"
+    "email": "support@rajatmalik.dev",
+    "url": "https://github.com/malikrajat"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/malikrajat/dead-css-cleaner.git#readme",
+  "homepage": "https://github.com/malikrajat/dead-css-cleaner#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/malikrajat/dead-css-cleaner.git"
   },
   "bugs": {
-    "url": "https://github.com/malikrajat/dead-css-cleaner/issues"
+    "url": "https://github.com/malikrajat/dead-css-cleaner/issues",
+    "email": "support@rajatmalik.dev"
   },
+  "qna": "https://github.com/malikrajat/dead-css-cleaner/discussions",
+  "sponsor": {
+    "url": "https://github.com/sponsors/malikrajat"
+  },
+  "markdown": "github",
   "keywords": [
+    "unused css",
+    "dead css",
+    "unused css remover",
+    "remove unused css",
+    "css cleanup",
+    "unused selectors",
+    "dead code",
+    "css linter",
     "css",
-    "unused",
+    "scss",
+    "sass",
+    "less",
+    "css modules",
     "react",
+    "jsx",
+    "tsx",
     "angular",
+    "vue",
+    "svelte",
+    "astro",
+    "html",
+    "spa",
+    "classnames",
+    "clsx",
+    "code action",
+    "quick fix",
+    "refactor",
     "optimization",
-    "cleanup",
-    "selectors",
-    "performance",
-    "bundle-size",
-    "dead-code"
+    "bundle size",
+    "performance"
   ],
-
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Other"
+  ],
   "galleryBanner": {
-    "color": "#007ACC",
+    "color": "#0b5cad",
     "theme": "dark"
   },
   "badges": [
@@ -41,71 +73,188 @@
       "url": "https://img.shields.io/github/license/malikrajat/dead-css-cleaner",
       "href": "https://github.com/malikrajat/dead-css-cleaner/blob/main/LICENSE",
       "description": "License"
+    },
+    {
+      "url": "https://img.shields.io/github/v/release/malikrajat/dead-css-cleaner",
+      "href": "https://github.com/malikrajat/dead-css-cleaner/releases",
+      "description": "Latest release"
+    },
+    {
+      "url": "https://img.shields.io/github/issues/malikrajat/dead-css-cleaner",
+      "href": "https://github.com/malikrajat/dead-css-cleaner/issues",
+      "description": "Issues"
     }
   ],
-  "qna": "marketplace",
-  "sponsor": {
-    "url": "https://github.com/sponsors/malikrajat"
-  },
   "engines": {
-    "vscode": "^1.74.0",
-    "node": ">=16.0.0"
+    "vscode": "^1.90.0",
+    "node": ">=18.0.0"
   },
   "extensionKind": [
     "workspace"
   ],
-  "categories": [
-    "Linters",
-    "Programming Languages",
-    "Other"
-  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true,
+      "description": "%capabilities.untrustedWorkspaces.description%"
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "%capabilities.virtualWorkspaces.description%"
+    }
+  },
   "activationEvents": [
+    "workspaceContains:**/*.{css,scss,sass,less}",
     "onLanguage:css",
     "onLanguage:scss",
+    "onLanguage:sass",
     "onLanguage:less",
-    "onLanguage:typescript",
     "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
     "onLanguage:typescriptreact",
-    "onLanguage:javascriptreact"
+    "onLanguage:html",
+    "onLanguage:vue",
+    "onLanguage:svelte",
+    "onLanguage:astro",
+    "onView:deadCssCleaner.deadSelectors"
   ],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "unusedCssDetector.analyze",
-        "title": "Analyze Unused CSS",
-        "category": "Unused CSS Detector",
+        "title": "%command.analyze.title%",
+        "category": "%command.category%",
         "icon": "$(search)"
       },
       {
-        "command": "unusedCssDetector.showErrors",
-        "title": "Show Analysis Errors",
-        "category": "Unused CSS Detector",
-        "icon": "$(error)"
+        "command": "unusedCssDetector.analyzeCurrentFile",
+        "title": "%command.analyzeCurrentFile.title%",
+        "category": "%command.category%",
+        "icon": "$(file-code)"
       },
       {
-        "command": "unusedCssDetector.clearErrors",
-        "title": "Clear Error Log",
-        "category": "Unused CSS Detector",
-        "icon": "$(clear-all)"
+        "command": "unusedCssDetector.removeUnusedInFile",
+        "title": "%command.removeUnusedInFile.title%",
+        "category": "%command.category%",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "unusedCssDetector.exportReport",
+        "title": "%command.exportReport.title%",
+        "category": "%command.category%",
+        "icon": "$(export)"
       },
       {
         "command": "unusedCssDetector.showPerformanceStats",
-        "title": "Show Performance Statistics",
-        "category": "Unused CSS Detector",
+        "title": "%command.showPerformanceStats.title%",
+        "category": "%command.category%",
         "icon": "$(graph)"
       },
       {
         "command": "unusedCssDetector.clearCache",
-        "title": "Clear Analysis Cache",
-        "category": "Unused CSS Detector",
+        "title": "%command.clearCache.title%",
+        "category": "%command.category%",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "unusedCssDetector.showErrors",
+        "title": "%command.showErrors.title%",
+        "category": "%command.category%",
+        "icon": "$(error)"
+      },
+      {
+        "command": "unusedCssDetector.clearErrors",
+        "title": "%command.clearErrors.title%",
+        "category": "%command.category%",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "unusedCssDetector.showLog",
+        "title": "%command.showLog.title%",
+        "category": "%command.category%",
+        "icon": "$(output)"
+      },
+      {
+        "command": "unusedCssDetector.openSettings",
+        "title": "%command.openSettings.title%",
+        "category": "%command.category%",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "unusedCssDetector.afterEdit",
+        "title": "%command.afterEdit.title%",
+        "category": "%command.category%"
+      },
+      {
+        "command": "unusedCssDetector.showComponentReport",
+        "title": "%command.showComponentReport.title%",
+        "category": "%command.category%",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "unusedCssDetector.copyDeadCssList",
+        "title": "%command.copyDeadCssList.title%",
+        "category": "%command.category%",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "unusedCssDetector.refreshDeadCssView",
+        "title": "%command.refreshDeadCssView.title%",
+        "category": "%command.category%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "unusedCssDetector.revealDeadSelector",
+        "title": "%command.revealDeadSelector.title%",
+        "category": "%command.category%",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "unusedCssDetector.removeDeadSelector",
+        "title": "%command.removeDeadSelector.title%",
+        "category": "%command.category%",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "unusedCssDetector.ignoreDeadSelector",
+        "title": "%command.ignoreDeadSelector.title%",
+        "category": "%command.category%",
+        "icon": "$(mute)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "unusedCssDetector.analyze",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d",
+        "when": "workspaceHasFiles"
       }
     ],
     "menus": {
       "commandPalette": [
         {
           "command": "unusedCssDetector.analyze",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.analyzeCurrentFile",
+          "when": "editorIsOpen"
+        },
+        {
+          "command": "unusedCssDetector.removeUnusedInFile",
+          "when": "editorLangId =~ /^(css|scss|sass|less)$/"
+        },
+        {
+          "command": "unusedCssDetector.exportReport",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.showPerformanceStats",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.clearCache",
           "when": "workspaceHasFiles"
         },
         {
@@ -117,22 +266,272 @@
           "when": "workspaceHasFiles"
         },
         {
-          "command": "unusedCssDetector.showPerformanceStats",
+          "command": "unusedCssDetector.showLog",
           "when": "workspaceHasFiles"
         },
         {
-          "command": "unusedCssDetector.clearCache",
+          "command": "unusedCssDetector.openSettings",
           "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.afterEdit",
+          "when": "false"
+        },
+        {
+          "command": "unusedCssDetector.showComponentReport",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.copyDeadCssList",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.refreshDeadCssView",
+          "when": "workspaceHasFiles"
+        },
+        {
+          "command": "unusedCssDetector.revealDeadSelector",
+          "when": "false"
+        },
+        {
+          "command": "unusedCssDetector.removeDeadSelector",
+          "when": "false"
+        },
+        {
+          "command": "unusedCssDetector.ignoreDeadSelector",
+          "when": "false"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "unusedCssDetector.analyzeCurrentFile",
+          "when": "editorLangId =~ /^(css|scss|sass|less)$/",
+          "group": "navigation@10"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "unusedCssDetector.analyzeCurrentFile",
+          "when": "editorLangId =~ /^(css|scss|sass|less)$/",
+          "group": "deadCssCleaner@1"
+        },
+        {
+          "command": "unusedCssDetector.removeUnusedInFile",
+          "when": "editorLangId =~ /^(css|scss|sass|less)$/",
+          "group": "deadCssCleaner@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "unusedCssDetector.analyze",
+          "when": "explorerResourceIsFolder || workspaceFolderCount == 1",
+          "group": "deadCssCleaner@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "unusedCssDetector.refreshDeadCssView",
+          "when": "view == deadCssCleaner.deadSelectors",
+          "group": "navigation@1"
+        },
+        {
+          "command": "unusedCssDetector.showComponentReport",
+          "when": "view == deadCssCleaner.deadSelectors",
+          "group": "navigation@2"
+        },
+        {
+          "command": "unusedCssDetector.copyDeadCssList",
+          "when": "view == deadCssCleaner.deadSelectors",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "unusedCssDetector.revealDeadSelector",
+          "when": "view == deadCssCleaner.deadSelectors && viewItem == deadCssRow",
+          "group": "inline@1"
+        },
+        {
+          "command": "unusedCssDetector.removeDeadSelector",
+          "when": "view == deadCssCleaner.deadSelectors && viewItem == deadCssRow",
+          "group": "inline@2"
+        },
+        {
+          "command": "unusedCssDetector.ignoreDeadSelector",
+          "when": "view == deadCssCleaner.deadSelectors && viewItem == deadCssRow",
+          "group": "deadCssCleaner@1"
         }
       ]
     },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "deadCssCleaner",
+          "title": "%view.container.title%",
+          "icon": "media/dead-css-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "deadCssCleaner": [
+        {
+          "id": "deadCssCleaner.deadSelectors",
+          "name": "%view.deadSelectors.name%",
+          "contextualTitle": "%view.deadSelectors.name%",
+          "icon": "media/dead-css-icon.svg"
+        }
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "deadCssCleaner.gettingStarted",
+        "title": "%walkthrough.title%",
+        "description": "%walkthrough.description%",
+        "when": "workspaceHasFiles",
+        "steps": [
+          {
+            "id": "analyze",
+            "title": "%walkthrough.analyze.title%",
+            "description": "%walkthrough.analyze.description%",
+            "media": {
+              "markdown": "media/walkthrough-analyze.md"
+            },
+            "completionEvents": [
+              "onCommand:unusedCssDetector.analyze"
+            ]
+          },
+          {
+            "id": "review",
+            "title": "%walkthrough.review.title%",
+            "description": "%walkthrough.review.description%",
+            "media": {
+              "markdown": "media/walkthrough-review.md"
+            }
+          },
+          {
+            "id": "fix",
+            "title": "%walkthrough.fix.title%",
+            "description": "%walkthrough.fix.description%",
+            "media": {
+              "markdown": "media/walkthrough-fix.md"
+            }
+          },
+          {
+            "id": "tune",
+            "title": "%walkthrough.tune.title%",
+            "description": "%walkthrough.tune.description%",
+            "media": {
+              "markdown": "media/walkthrough-tune.md"
+            }
+          }
+        ]
+      }
+    ],
     "configuration": {
-      "title": "Unused CSS Detector",
+      "title": "%configuration.title%",
       "properties": {
+        "unusedCssDetector.analysisMode": {
+          "type": "string",
+          "enum": [
+            "token",
+            "strict"
+          ],
+          "default": "token",
+          "enumDescriptions": [
+            "Report every unused class/id, including the dead part of a partially used selector such as `.card .title`.",
+            "Only report a selector when every class/id in it is unused. Quietest option for deeply nested component styles."
+          ],
+          "markdownDescription": "How aggressively dead selectors are reported.\n\n* `token` - report every unused class/id (recommended default).\n* `strict` - report a selector only when **all** of its classes/ids are unused.",
+          "scope": "resource",
+          "order": 1
+        },
+        "unusedCssDetector.componentScope": {
+          "type": "string",
+          "enum": [
+            "off",
+            "component",
+            "tree"
+          ],
+          "enumDescriptions": [
+            "Any usage anywhere in the workspace counts as used (fastest, most permissive).",
+            "A class counts as used when the owning component or one of its direct child components uses it.",
+            "A class counts as used anywhere in the owning component's subtree, however deep the nesting."
+          ],
+          "default": "tree",
+          "markdownDescription": "How far the \"is this used?\" check follows child components.\n\nStylesheets are matched to the component that declares them (`styleUrls`, CSS imports, `.vue`/`.svelte`/`.astro` styles), and the classes are then validated against that component **and its child components** - so a parent stylesheet that a child applies is never reported as dead.\n\nTokens that are only used outside that subtree are listed separately in the component report instead of being called dead.",
+          "scope": "resource",
+          "order": 2
+        },
         "unusedCssDetector.autoAnalyze": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically analyze CSS when files are saved or opened"
+          "description": "Automatically analyse when relevant files are saved, opened or changed.",
+          "scope": "window",
+          "order": 2
+        },
+        "unusedCssDetector.includeFileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".css",
+            ".scss",
+            ".less",
+            ".sass"
+          ],
+          "description": "Stylesheet extensions to analyse.",
+          "scope": "resource",
+          "order": 10
+        },
+        "unusedCssDetector.componentFileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx",
+            ".mjs",
+            ".cjs",
+            ".mts",
+            ".cts",
+            ".vue",
+            ".svelte",
+            ".astro"
+          ],
+          "description": "Component/script extensions scanned for class usage (React, Angular, Vue, Svelte, Astro, plain JS/TS).",
+          "scope": "resource",
+          "order": 11
+        },
+        "unusedCssDetector.markupFileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".html",
+            ".htm",
+            ".vue",
+            ".svelte",
+            ".astro",
+            ".php",
+            ".erb",
+            ".hbs",
+            ".handlebars",
+            ".twig",
+            ".ejs",
+            ".cshtml",
+            ".razor",
+            ".mdx",
+            ".aspx",
+            ".jsp"
+          ],
+          "markdownDescription": "Template/markup extensions scanned for class and id usage.\n\nThis is what makes plain SPA projects (`index.html` + `styles.css` with no framework) work.",
+          "scope": "resource",
+          "order": 12
         },
         "unusedCssDetector.excludePatterns": {
           "type": "array",
@@ -143,141 +542,310 @@
             "**/node_modules/**",
             "**/dist/**",
             "**/build/**",
-            "**/.git/**"
+            "**/out/**",
+            "**/.git/**",
+            "**/coverage/**",
+            "**/.next/**",
+            "**/.nuxt/**",
+            "**/.angular/**",
+            "**/.svelte-kit/**",
+            "**/vendor/**",
+            "**/*.min.css",
+            "**/*.d.ts"
           ],
-          "description": "Glob patterns for files and directories to exclude from analysis"
-        },
-        "unusedCssDetector.includeFileTypes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            ".css",
-            ".scss",
-            ".less"
-          ],
-          "description": "CSS file extensions to analyze"
-        },
-        "unusedCssDetector.componentFileTypes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            ".jsx",
-            ".tsx",
-            ".ts",
-            ".js"
-          ],
-          "description": "Component file extensions to scan for CSS usage"
-        },
-        "unusedCssDetector.showStatusBar": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show unused CSS count in status bar"
-        },
-        "unusedCssDetector.showNotifications": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show notification messages when analysis completes"
+          "description": "Glob patterns for files and folders to skip.",
+          "scope": "resource",
+          "order": 13
         },
         "unusedCssDetector.minFilesForAnalysis": {
           "type": "number",
           "default": 1,
           "minimum": 1,
-          "description": "Minimum number of CSS files required to trigger analysis"
+          "description": "Minimum number of style-bearing files required before analysis runs.",
+          "scope": "resource",
+          "order": 14
+        },
+        "unusedCssDetector.analyzeIds": {
+          "type": "boolean",
+          "default": true,
+          "description": "Also report unused #id selectors.",
+          "scope": "resource",
+          "order": 15
+        },
+        "unusedCssDetector.analyzeElements": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Also report element-only selectors such as `article {}` that never appear in any template.\n\nOff by default because element selectors are frequently styled globally on purpose.",
+          "scope": "resource",
+          "tags": [
+            "experimental"
+          ],
+          "order": 16
+        },
+        "unusedCssDetector.ignoreSelectors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Regex patterns for selectors or tokens that must never be reported, for example `\"^legacy-\"`.",
+          "scope": "resource",
+          "order": 20
+        },
+        "unusedCssDetector.safelist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Regex or prefix patterns (`\"btn-*\"`, `\"^js-\"`) for classes that are always considered used.",
+          "scope": "resource",
+          "order": 21
+        },
+        "unusedCssDetector.dynamicClassPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Extra patterns for dynamically generated class names, for example `\"col-\"` when classes are built as `` `col-${size}` ``.",
+          "scope": "resource",
+          "order": 22
+        },
+        "unusedCssDetector.ignoreComment": {
+          "type": "string",
+          "default": "dead-css-ignore",
+          "markdownDescription": "Comment marker that makes the extension skip the following rule, for example `/* dead-css-ignore */`. Use `dead-css-ignore-file` to skip a whole file.",
+          "scope": "resource",
+          "order": 23
+        },
+        "unusedCssDetector.severity": {
+          "type": "string",
+          "enum": [
+            "information",
+            "warning",
+            "error"
+          ],
+          "default": "warning",
+          "description": "Severity used for entries in the Problems panel.",
+          "scope": "resource",
+          "order": 24
+        },
+        "unusedCssDetector.tagUnnecessary": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Show dead selectors with the \"unnecessary\" tag (dimmed) instead of a plain warning.",
+          "scope": "resource",
+          "order": 25
+        },
+        "unusedCssDetector.maxUsageLocations": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "How many usage locations to keep per token (shown as related information in the Problems panel).",
+          "scope": "resource",
+          "order": 26
+        },
+        "unusedCssDetector.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the dead selector count in the status bar.",
+          "scope": "window",
+          "order": 30
+        },
+        "unusedCssDetector.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notifications when analysis finishes.",
+          "scope": "window",
+          "order": 31
         },
         "unusedCssDetector.debounceDelay": {
           "type": "number",
-          "default": 500,
+          "default": 600,
           "minimum": 0,
-          "maximum": 5000,
-          "description": "Delay in milliseconds before analyzing after file changes"
+          "maximum": 10000,
+          "description": "Delay in milliseconds before analysing after a file change.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 40
         },
         "unusedCssDetector.enableCaching": {
           "type": "boolean",
           "default": true,
-          "description": "Enable file content caching for better performance"
+          "description": "Cache parse results per file. The cache is invalidated whenever a file changes.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 41
         },
         "unusedCssDetector.cacheTimeout": {
           "type": "number",
           "default": 300000,
-          "minimum": 60000,
+          "minimum": 0,
           "maximum": 1800000,
-          "description": "Cache timeout in milliseconds (default: 5 minutes)"
+          "description": "Cache lifetime in milliseconds. 0 disables time-based expiry.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 42
         },
         "unusedCssDetector.maxConcurrentFiles": {
           "type": "number",
-          "default": 10,
+          "default": 12,
           "minimum": 1,
-          "maximum": 50,
-          "description": "Maximum number of files to process concurrently"
+          "maximum": 64,
+          "description": "How many files to process per batch.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 43
         },
         "unusedCssDetector.largeProjectThreshold": {
           "type": "number",
-          "default": 100,
+          "default": 150,
           "minimum": 10,
-          "maximum": 1000,
-          "description": "Number of files that defines a 'large project' for performance optimizations"
+          "maximum": 5000,
+          "description": "File count above which progress notifications are shown.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 44
         },
         "unusedCssDetector.enableFileWatcher": {
           "type": "boolean",
           "default": true,
-          "description": "Enable intelligent file watching for better performance"
+          "description": "Watch for created, deleted and changed files and re-analyse automatically.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 45
         },
         "unusedCssDetector.watcherThrottleDelay": {
           "type": "number",
           "default": 2000,
-          "minimum": 500,
-          "maximum": 10000,
-          "description": "Delay in milliseconds for file watcher throttling"
+          "minimum": 200,
+          "maximum": 60000,
+          "description": "Throttle delay in milliseconds for file watcher events.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 46
+        },
+        "unusedCssDetector.maxCssFileSizeKb": {
+          "type": "number",
+          "default": 5120,
+          "minimum": 64,
+          "maximum": 51200,
+          "description": "Skip stylesheets larger than this size in KB.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 47
+        },
+        "unusedCssDetector.maxSourceFileSizeKb": {
+          "type": "number",
+          "default": 2048,
+          "minimum": 64,
+          "maximum": 51200,
+          "description": "Skip component and template files larger than this size in KB.",
+          "scope": "window",
+          "tags": [
+            "performance"
+          ],
+          "order": 48
+        },
+        "unusedCssDetector.debugLogging": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Write detailed parsing information to the **Dead CSS Cleaner** output channel. Useful when reporting a bug.",
+          "scope": "window",
+          "tags": [
+            "debug"
+          ],
+          "order": 49
         }
       }
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
+    "clean": "rimraf dist out out-cli coverage",
     "compile": "tsc -p ./",
-    "compile:production": "tsc -p ./ --sourceMap false",
-    "watch": "npm run webpack:dev -- --watch",
-    "clean": "rimraf out",
+    "compile:watch": "tsc -p ./ --watch",
+    "typecheck": "tsc -p ./ --noEmit",
     "build": "npm run clean && npm run webpack:production",
     "build:dev": "npm run clean && npm run webpack:dev",
+    "build:cli": "tsc -p ./ --outDir out-cli --sourceMap false",
+    "watch": "webpack --mode development --watch",
     "webpack:dev": "webpack --mode development",
     "webpack:production": "webpack --mode production",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "lint:fix": "eslint src --ext ts --fix",
-    "test": "node ./out/test/runTest.js",
+    "check": "biome check .",
+    "check:write": "biome check --write .",
+    "check:ci": "biome ci .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "verify:manifest": "node ./scripts/verify-manifest.js",
+    "verify:guard": "node ./scripts/verify-branch-guard.js",
+    "optimize:icon": "node ./scripts/optimize-icon.js",
+    "verify": "npm run verify:manifest && npm run verify:guard && npm run check && npm run typecheck && npm run test:unit",
+    "test": "npm run test:unit",
+    "test:compile": "tsc -p ./",
+    "test:unit": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/**/*.test.js\"",
+    "test:unit:infra": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/{config,cache,textUtils,errors}.test.js\"",
+    "test:unit:css": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/cssParser.test.js\"",
+    "test:unit:js": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/jsUsageParser.test.js\"",
+    "test:unit:markup": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/markupAndAngular.test.js\"",
+    "test:unit:analysis": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/usageIndex.test.js\"",
+    "test:unit:scenarios": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/spaScenario.test.js\"",
+    "test:unit:reports": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/reportText.test.js\"",
+    "test:unit:components": "npm run test:compile --silent && mocha --ui tdd \"out/test/unit/{componentGraph,scopedAnalysis,componentReport}.test.js\"",
+    "test:coverage": "npm run test:compile --silent && c8 --reporter=text --reporter=lcov --reporter=json-summary mocha --ui tdd \"out/test/unit/**/*.test.js\"",
+    "test:vscode": "npm run build:dev && npm run test:compile --silent && node ./out/test/runTest.js",
+    "analyze": "npm run build:cli --silent && node ./scripts/analyze-folder.js",
     "package": "npm run build && vsce package",
-    "package:dev": "npm run build:dev && vsce package",
+    "package:dev": "npm run build:dev && vsce package --no-dependencies",
     "publish": "npm run build && vsce publish",
+    "publish:minor": "npm run build && vsce publish minor",
     "install-vsce": "npm install -g @vscode/vsce"
   },
   "dependencies": {
-    "postcss": "^8.4.31",
-    "postcss-selector-parser": "^6.0.13",
     "@babel/parser": "^7.23.0",
     "@babel/traverse": "^7.23.0",
-    "@babel/types": "^7.23.0"
+    "@babel/types": "^7.23.0",
+    "postcss": "^8.4.31",
+    "postcss-less": "^6.0.0",
+    "postcss-scss": "^4.0.9",
+    "postcss-selector-parser": "^6.0.13"
   },
   "devDependencies": {
-    "@types/vscode": "^1.74.0",
-    "@types/node": "16.x",
+    "@biomejs/biome": "2.5.14",
     "@types/babel__traverse": "^7.20.2",
     "@types/mocha": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "@typescript-eslint/parser": "^6.4.0",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.90.0",
     "@vscode/test-electron": "^2.3.4",
-    "eslint": "^8.47.0",
+    "@vscode/vsce": "^2.19.0",
+    "c8": "12.0.0",
     "glob": "^10.3.3",
+    "js-yaml": "5.4.2",
     "mocha": "^10.2.0",
     "rimraf": "^5.0.5",
+    "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
-    "@vscode/vsce": "^2.19.0",
     "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.4",
-    "ts-loader": "^9.4.4"
+    "webpack-cli": "^5.1.4"
   }
 }

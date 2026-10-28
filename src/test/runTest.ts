@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import { runTests } from '@vscode/test-electron';
 
 async function main() {
@@ -11,9 +11,16 @@ async function main() {
         // Passed to --extensionTestsPath
         const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
+        // Open the bundled fixtures so the extension analyses real files.
+        const workspacePath = path.resolve(__dirname, '../../test-files');
+
         // Download VS Code, unzip it and run the integration test
-        await runTests({ extensionDevelopmentPath, extensionTestsPath });
-    } catch (err) {
+        await runTests({
+            extensionDevelopmentPath,
+            extensionTestsPath,
+            launchArgs: [workspacePath, '--disable-extensions', '--disable-gpu', '--no-sandbox'],
+        });
+    } catch (_err) {
         console.error('Failed to run tests');
         process.exit(1);
     }
