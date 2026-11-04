@@ -51,7 +51,7 @@ body:
     id: versions
     attributes:
       label: Extension version, VS Code version and OS
-      placeholder: "dead-css-cleaner 1.2.0, VS Code 1.95.0, Windows 11"
+      placeholder: "dead-css-cleaner 2.1.0, VS Code 1.95.0, Windows 11"
     validations:
       required: true
   - type: dropdown
@@ -65,10 +65,13 @@ body:
   - type: textarea
     id: logs
     attributes:
-      label: Output channel log or CLI output
+      label: Diagnostics bundle or log
       description: |
-        Turn on `unusedCssDetector.debugLogging`, open the "Dead CSS Cleaner" output channel, and paste anything relevant.
-        If possible also paste `npm run analyze -- <folder> --json`.
+        The extension can create this for you: when an error notification appears, click **Download Log**.
+        It saves a ZIP with the session log, error stacks, settings and environment to your Downloads folder.
+        Drag the ZIP into this text area to attach it, or email it to support@rajatmalik.dev.
+        Home-directory and workspace paths are redacted.
+        If you prefer to paste manually, turn on `unusedCssDetector.debugLogging` and copy the "Dead CSS Cleaner" output channel.
       render: text
     validations:
       required: false

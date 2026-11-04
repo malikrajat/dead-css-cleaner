@@ -1,14 +1,15 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { DEFAULT_CONFIG, type ExtensionConfig, normalizeConfig } from './core/config';
-import { initializeOutputChannel, registerErrorReporting } from './core/errorReporter';
-import { errorMessage } from './core/errors';
+import { initializeOutputChannel, installCrashHandlers, registerErrorReporting } from './core/errorReporter';
+import { ErrorCollector, errorMessage } from './core/errors';
 import { logger } from './core/logger';
 import { buildRemoveAllEdit, DeadCssCodeActionProvider } from './features/codeActions';
 import { buildComponentReportMarkdown, type ReportRow } from './features/componentReport';
 import { DeadCssTreeProvider, deadCssListForClipboard } from './features/deadCssTreeView';
 import { DeadCssHoverProvider } from './features/hoverProvider';
 import { exportReport } from './features/report';
+import { registerDiagnosticsCommand } from './features/supportBundle';
 import { ExtensionState } from './state';
 
 const CSS_LANGUAGES = ['css', 'scss', 'less', 'sass'];
@@ -20,7 +21,22 @@ let watcherThrottleTimer: NodeJS.Timeout | undefined;
 export function activate(context: vscode.ExtensionContext): void {
     initializeOutputChannel(context);
     registerErrorReporting(context);
+    installCrashHandlers(context);
 
+    // The diagnostics command is registered before anything else so the
+    // "Download Log" button also works when activation itself fails.
+    const stateRef: { current?: ExtensionState } = {};
+    registerDiagnosticsCommand(context, () => stateRef.current);
+
+    try {
+        activateExtension(context, stateRef);
+    } catch (error) {
+        ErrorCollector.from('general', 'Extension activation failed', error, { recoverable: false });
+        throw error;
+    }
+}
+
+function activateExtension(context: vscode.ExtensionContext, stateRef: { current?: ExtensionState }): void {
     const diagnosticCollection = vscode.languages.createDiagnosticCollection('dead-css-cleaner');
     context.subscriptions.push(diagnosticCollection);
 
@@ -35,6 +51,7 @@ export function activate(context: vscode.ExtensionContext): void {
         treeProvider?.setResult(result);
         updateBadge?.(result?.findings.length ?? 0);
     });
+    stateRef.current = state;
     context.subscriptions.push({ dispose: () => state.dispose() });
     context.subscriptions.push({ dispose: () => logger.clearSinks() });
     context.subscriptions.push({ dispose: () => clearTimers() });

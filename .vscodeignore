@@ -32,6 +32,7 @@ coverage/**
 # --- Community files (kept in git, not needed inside the VSIX) ---
 CONTRIBUTING.md
 CODE_OF_CONDUCT.md
+GITHUB-ACTIONS.md
 SECURITY.md
 SUPPORT.md
 

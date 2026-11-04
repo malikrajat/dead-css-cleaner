@@ -1,5 +1,6 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { DOWNLOAD_DIAGNOSTICS_COMMAND } from './commandIds';
 import { type AnalysisError, ErrorCollector } from './errors';
 import { type LogRecord, logger } from './logger';
 
@@ -34,6 +35,9 @@ export function showOutputChannel(): void {
 /**
  * Surface only *fatal* problems in the UI. Recoverable parse issues are logged
  * so the user is never interrupted by noise, but can still inspect them.
+ *
+ * Every fatal notification offers "Download Log", which writes a ZIP bundle
+ * with the session log, error records, environment, settings and analysis stats.
  */
 export function registerErrorReporting(context: vscode.ExtensionContext): void {
     ErrorCollector.subscribe((error) => {
@@ -54,20 +58,73 @@ export function registerErrorReporting(context: vscode.ExtensionContext): void {
     );
 }
 
+/**
+ * Capture exceptions that bypass `ErrorCollector`.
+ *
+ * `uncaughtExceptionMonitor` observes crashes without changing Node's default
+ * behaviour. Errors whose stack points into this extension are marked fatal, so
+ * the user gets the same "Download Log" notification; unrelated extension-host
+ * errors are only recorded.
+ */
+export function installCrashHandlers(context: vscode.ExtensionContext): void {
+    const onUncaught = (error: Error, origin: string): void => {
+        const ours = isExtensionError(error, context);
+        const record = ErrorCollector.from('general', `Uncaught exception (${origin})`, error, {
+            recoverable: !ours,
+        });
+        if (!ours) {
+            logger.error(record.message, record.details);
+        }
+    };
+
+    const onRejection = (reason: unknown): void => {
+        const error = reason instanceof Error ? reason : new Error(String(reason));
+        if (!isExtensionError(error, context)) {
+            return;
+        }
+        ErrorCollector.from('general', 'Unhandled promise rejection', error, { recoverable: false });
+    };
+
+    process.on('uncaughtExceptionMonitor', onUncaught);
+    process.on('unhandledRejection', onRejection);
+
+    context.subscriptions.push({
+        dispose: () => {
+            process.removeListener('uncaughtExceptionMonitor', onUncaught);
+            process.removeListener('unhandledRejection', onRejection);
+        },
+    });
+}
+
+function isExtensionError(error: Error, context: vscode.ExtensionContext): boolean {
+    const stack = error.stack ?? '';
+    const root = context.extension.extensionUri.fsPath;
+    return root.length > 0 && stack.toLowerCase().includes(root.toLowerCase());
+}
+
 function notifyFatal(error: AnalysisError): void {
     const message = error.file
         ? `Dead CSS Cleaner could not be applied to ${path.basename(error.file)}: ${error.message}`
         : `Dead CSS Cleaner: ${error.message}`;
 
-    vscode.window.showWarningMessage(message, 'Show Log', 'Show Errors', 'Open Settings').then((action) => {
-        if (action === 'Show Log') {
-            showOutputChannel();
-        } else if (action === 'Show Errors') {
-            showErrorSummary();
-        } else if (action === 'Open Settings') {
-            vscode.commands.executeCommand('workbench.action.openSettings', 'unusedCssDetector');
-        }
-    });
+    vscode.window
+        .showWarningMessage(message, 'Download Log', 'Show Log', 'Show Errors', 'Open Settings')
+        .then((action) => {
+            if (action === 'Download Log') {
+                vscode.commands
+                    .executeCommand(DOWNLOAD_DIAGNOSTICS_COMMAND)
+                    .then(undefined, (commandError: unknown) => {
+                        logger.warn('Could not download the diagnostics bundle', String(commandError));
+                        showOutputChannel();
+                    });
+            } else if (action === 'Show Log') {
+                showOutputChannel();
+            } else if (action === 'Show Errors') {
+                showErrorSummary();
+            } else if (action === 'Open Settings') {
+                vscode.commands.executeCommand('workbench.action.openSettings', 'unusedCssDetector');
+            }
+        });
 }
 
 export function showErrorSummary(): void {

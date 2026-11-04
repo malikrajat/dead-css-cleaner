@@ -95,6 +95,29 @@ No usages were found at all. The usual causes:
 
 ## Collecting diagnostics
 
+### One-click bundle
+
+When an error notification appears, choose **Download Log**. The extension writes
+`dead-css-cleaner-diagnostics-<timestamp>.zip` to your `Downloads` folder (or the system temp
+folder if `Downloads` is not writable) and shows the path with **Show in Folder**,
+**Open GitHub Issue** and **Copy Path** actions.
+
+| File | Contents |
+| --- | --- |
+| `diagnostics.txt` | Environment, settings, last-analysis stats, errors and the full log in one readable file. |
+| `log.txt` | Raw session log (up to 5,000 records). |
+| `errors.json` | Error records with stack traces, newest first. |
+| `environment.json` | Extension, VS Code, OS and Node/Electron versions. |
+| `settings.json` | Every `unusedCssDetector.*` setting, its value, source and default. |
+| `README.txt` | What the bundle contains and where to send it. |
+
+Home-directory paths are replaced with `<home>`, workspace roots with `<workspace>` and the
+working directory with `<cwd>`; no source files are included. Attach the ZIP to the
+[bug report form](https://github.com/malikrajat/dead-css-cleaner/issues/new/choose) or email it
+to **support@rajatmalik.dev**.
+
+### Manual collection
+
 ```jsonc
 // settings.json (temporarily)
 {

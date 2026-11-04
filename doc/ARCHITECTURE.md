@@ -39,10 +39,11 @@ This page explains how the extension is put together, which rules the code follo
 | `config.ts` | The `ExtensionConfig` type, defaults, `normalizeConfig()` (coerce, clamp, validate), dynamic pattern compilation. |
 | `types.ts` | Shared data types: `Detection`, `CssRuleInfo`, `UsageResult`, `AnalysisResult`, statistics. |
 | `errors.ts` | `ErrorCollector` (a namespaced object: bounded log of 200 entries, subscribable) plus `safeSync`/`safeAsync`. |
-| `logger.ts` | Tiny logger with pluggable sinks. In VS Code the sink is an `OutputChannel`; elsewhere it buffers to the console. |
+| `logger.ts` | Tiny logger with pluggable sinks. In VS Code the sink is an `OutputChannel`; elsewhere it buffers to the console. Also keeps a bounded 5,000-record history for the diagnostics bundle. |
 | `cache.ts` | `AnalysisCache<T>`: mtime and size keyed per-file parse results, with hit/miss statistics. |
 | `textUtils.ts` | `LineIndex` (offset to line/column and back), `findMatches` (safe global regex iteration), token splitting, dynamic prefix detection, string literal scanning, binary sniffing. |
-| `errorReporter.ts` | The only place that turns collected errors into VS Code notifications and documents. |
+| `supportBundle.ts` | Pure support-bundle model: redacts home/workspace paths, formats environment, settings, stats, errors and logs, and creates the ZIP with `fflate`. |
+| `errorReporter.ts` | The only place that turns collected errors into VS Code notifications and documents, including the **Download Log** action and process-level crash capture. |
 
 ### `src/parsers` - pure parsing, no VS Code dependency
 
@@ -75,6 +76,7 @@ This page explains how the extension is put together, which rules the code follo
 | `reportText.ts`, `report.ts` | Pure Markdown/JSON report builders, plus the VS Code code that writes and opens them. |
 | `componentReport.ts` | Group findings by owning component, render the per-component Markdown report and the flat copy list, and describe the validated scope. |
 | `deadCssTreeView.ts` | Sidebar view: component → dead class → selector chain, scope and "used elsewhere" files, with reveal/remove/ignore actions. |
+| `supportBundle.ts` | VS Code side of diagnostics: reads settings/environment/stats, resolves the Downloads folder, writes the ZIP and shows the toast with **Show in Folder**, **Open GitHub Issue** and **Copy Path**. |
 
 ---
 
@@ -112,7 +114,7 @@ Child edges come from three sources, whichever applies: Angular `selector:` valu
 
 ## Invariants
 
-- **`core/`, `parsers/` and `analysis/` must not import `vscode`.** This is what lets `src/test/unit` run in plain Node (48 tests, well under a second).
+- **`core/`, `parsers/` and `analysis/` must not import `vscode`.** This is what lets `src/test/unit` run in plain Node (128 tests, well under a second).
 - **Parsers never throw.** Every rule, selector, JSX attribute and binding is processed inside a try/catch; failures are recorded with `ErrorCollector` and the run continues with whatever was parsed.
 - **Prefer false negatives over false positives.** When a class name cannot be resolved statically, register a dynamic prefix and stop reporting that family instead of guessing.
 - **Every detection carries a real position.** Diagnostics must underline the exact token, not the start of the rule. `LineIndex`, PostCSS `source.start.offset` and Babel `loc` provide the mapping; masked-file tricks keep positions valid for `<style>` blocks and inline templates.
@@ -158,6 +160,7 @@ Any new parser needs at least one fixture in `test-files/` and one unit test. Ne
 | Parser unit tests (CSS, JS/JSX, markup, Angular) | `src/test/unit/{cssParser,jsUsageParser,markupAndAngular}.test.ts` | Plain Node (`npm run test:unit:css`, `:js`, `:markup`) |
 | Comparison and end-to-end unit tests | `src/test/unit/{usageIndex,spaScenario}.test.ts` | Plain Node (`npm run test:unit:analysis`, `:scenarios`) |
 | Report builders | `src/test/unit/reportText.test.ts` | Plain Node (`npm run test:unit:reports`) |
+| Support bundle (redaction, formatting, ZIP) | `src/test/unit/supportBundle.test.ts` | Plain Node (`npm run test:unit`) |
 | Coverage | c8 over `src/core`, `src/parsers`, `src/analysis`, `src/features` | Plain Node (`npm run test:coverage`) |
 | VS Code integration tests (activation, commands, diagnostics on `test-files/`) | `src/test/suite/extension.test.ts` | Downloaded VS Code (`npm run test:vscode`) |
 | CLI smoke run using the production pipeline | `npm run analyze -- test-files/spa` | Plain Node |

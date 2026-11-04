@@ -19,8 +19,10 @@ export type LogSink = (record: LogRecord) => void;
 class Logger {
     private sinks: LogSink[] = [];
     private buffer: LogRecord[] = [];
+    private history: LogRecord[] = [];
     private debugEnabled = false;
     private static readonly MAX_BUFFER = 200;
+    private static readonly MAX_HISTORY = 5000;
 
     /** Register an additional sink (e.g. the VS Code output channel). */
     addSink(sink: LogSink): void {
@@ -44,6 +46,15 @@ class Logger {
         return this.debugEnabled;
     }
 
+    /** Every record kept for the support bundle (bounded, oldest first). */
+    getHistory(): LogRecord[] {
+        return [...this.history];
+    }
+
+    clearHistory(): void {
+        this.history = [];
+    }
+
     debug(message: string, details?: string): void {
         if (!this.debugEnabled) {
             return;
@@ -65,6 +76,13 @@ class Logger {
 
     private emit(level: LogLevel, message: string, details?: string): void {
         const record: LogRecord = { level, message, details, timestamp: new Date() };
+
+        // Keep a bounded session history even when an output-channel sink exists,
+        // so the diagnostics bundle can include everything that was logged.
+        this.history.push(record);
+        if (this.history.length > Logger.MAX_HISTORY) {
+            this.history.shift();
+        }
 
         // Never let logging itself break a parse.
         try {

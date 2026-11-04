@@ -4,7 +4,56 @@ All notable changes to **Dead CSS Cleaner** are documented here.
 The project follows [Semantic Versioning](https://semver.org/) and the
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
-## [Unreleased]
+## [2.1.0] - 2026-11-03
+
+Support release: when something goes wrong, users can now send a complete diagnostics bundle
+instead of copying log lines by hand.
+
+### Added
+
+- **Downloadable diagnostics bundle.** Fatal errors now offer a **Download Log** button. It
+  writes a ZIP to the user's `Downloads` folder (falling back to the system temp directory)
+  and shows a toast with the full path plus **Show in Folder**, **Open GitHub Issue** and
+  **Copy Path** actions. The ZIP contains:
+  - `diagnostics.txt` - environment, settings, last-analysis stats, error records and the
+    full session log in one readable file.
+  - `log.txt` - the raw session log.
+  - `errors.json` - error records with stack traces, newest first.
+  - `environment.json` - extension, VS Code, OS and Node/Electron versions.
+  - `settings.json` - every `unusedCssDetector.*` setting, its value, source and default.
+  - `README.txt` - what the bundle contains and where to send it.
+- **Privacy redaction.** Home-directory paths are replaced with `<home>`, workspace roots
+  with `<workspace>` and the process working directory with `<cwd>`, including the escaped
+  form used inside JSON values. No source files are included.
+- **Crash capture.** Uncaught exceptions and unhandled promise rejections whose stack points
+  into this extension are recorded and included in the next bundle, even when they bypass
+  the normal error path. Unrelated extension-host errors are ignored.
+- **Support address** `support@rajatmalik.dev` is documented in the README, `SUPPORT.md`,
+  the issue form and the bundle's `README.txt`.
+
+### Changed
+
+- The fatal-error notification now leads with **Download Log**, followed by **Show Log**,
+  **Show Errors** and **Open Settings**.
+- README and Marketplace metadata now show a full badge wall: Marketplace
+  version/installs/downloads/rating/last-updated, CI, CodeQL, tests, VS Code/Node/TypeScript
+  versions, repository activity, sponsor, changelog and supported frameworks.
+- `logger` keeps a bounded 5,000-entry session history so the bundle can include records
+  that are older than the visible output channel content.
+- The diagnostics command is registered before activation work begins, so **Download Log**
+  still works when activation itself fails.
+- 9 new unit tests (128 total) cover timestamped file names, path redaction (including
+  JSON-escaped paths), log/error/settings formatting and ZIP round-tripping.
+
+### Fixed
+
+- None. This release is additive.
+
+## [2.0.0] - 2026-11-03
+
+Major release that makes the build reproducible and the release path safe. The analysis
+engine, the per-component report and the "Dead CSS by component" view introduced across the
+1.x line are unchanged in behaviour; upgrading from `1.4.0` is a drop-in update.
 
 ### Added
 
@@ -12,9 +61,13 @@ The project follows [Semantic Versioning](https://semver.org/) and the
   pointing it at a different branch.
 - `.github/workflows/branch-guard.yml` - a reusable guard job that every other workflow calls
   as its first job.
+- **Release packaging is verified in CI.** `ci.yml` builds the production bundle and packages
+  the VSIX on every run, so a manifest or `.vscodeignore` mistake is caught before a release
+  tag is pushed.
 
 ### Changed
 
+- **Version 2.0.0.** `package.json` and `package-lock.json` are kept in sync for the release.
 - Workflows now run **only from `main`** (pushes and manual dispatches) and from tags whose
   commit is on `main`. Push filters were narrowed and the `pull_request` triggers were
   removed, so no other branch can start a workflow.
@@ -218,6 +271,8 @@ real edge-case handling, and makes every failure path recoverable.
   parsing, Babel JSX parsing, Problems panel diagnostics, status bar count, hover tooltips
   and auto-analysis on save/open.
 
+[2.1.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.4.0...v2.0.0
 [1.2.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.1.0...v1.2.0
 [1.3.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.2.0...v1.3.0
 [1.4.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.3.0...v1.4.0

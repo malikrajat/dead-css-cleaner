@@ -11,7 +11,7 @@ Thanks for using **Dead CSS Cleaner**. Here is where to get help.
 
 ## Asking a question
 
-Use [GitHub Discussions](https://github.com/malikrajat/dead-css-cleaner/discussions) for usage questions, configuration help and ideas.
+Use [GitHub Discussions](https://github.com/malikrajat/dead-css-cleaner/discussions) for usage questions, configuration help and ideas. For anything private, email **support@rajatmalik.dev**.
 
 ## Reporting a bug
 
@@ -21,11 +21,19 @@ Open an issue with the [bug report form](https://github.com/malikrajat/dead-css-
 2. The component or template snippet that uses the class, and the framework plus version.
 3. Your `unusedCssDetector.analysisMode` (`token` or `strict`).
 4. The extension version (Extensions view, or `code --list-extensions --show-versions`).
-5. A minimal reproduction or the CLI output:
+5. The diagnostics bundle described below, or a minimal reproduction / CLI output:
 
    ```bash
    npm run analyze -- path/to/minimal-project --json
    ```
+
+## Sending logs and diagnostics
+
+When an error notification appears, choose **Download Log**. The extension writes a ZIP file to your `Downloads` folder (or the system temp folder if `Downloads` is not writable) and shows the path with **Show in Folder**, **Open GitHub Issue** and **Copy Path** actions.
+
+The bundle contains the session log, error stack traces, your `unusedCssDetector.*` settings, and the extension, VS Code, OS and Node/Electron versions. Home-directory paths are replaced with `<home>`, workspace roots with `<workspace>` and the working directory with `<cwd>`; no source files are included. Review the text files before sharing if project names are sensitive.
+
+Attach the ZIP to the issue, or email it to **support@rajatmalik.dev** with a short description of what happened.
 
 ## Before you report
 
