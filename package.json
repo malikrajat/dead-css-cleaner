@@ -3,7 +3,7 @@
   "name": "dead-css-cleaner",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "1.4.0",
+  "version": "2.1.0",
   "publisher": "RajatMalik",
   "license": "MIT",
   "icon": "icon.png",
@@ -70,19 +70,54 @@
   },
   "badges": [
     {
-      "url": "https://img.shields.io/github/license/malikrajat/dead-css-cleaner",
+      "url": "https://img.shields.io/visual-studio-marketplace/v/RajatMalik.dead-css-cleaner?style=flat-square&label=marketplace&color=0b5cad",
+      "href": "https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner",
+      "description": "Marketplace version"
+    },
+    {
+      "url": "https://img.shields.io/visual-studio-marketplace/i/RajatMalik.dead-css-cleaner?style=flat-square",
+      "href": "https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner",
+      "description": "Installs"
+    },
+    {
+      "url": "https://img.shields.io/visual-studio-marketplace/d/RajatMalik.dead-css-cleaner?style=flat-square",
+      "href": "https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner",
+      "description": "Downloads"
+    },
+    {
+      "url": "https://img.shields.io/visual-studio-marketplace/r/RajatMalik.dead-css-cleaner?style=flat-square",
+      "href": "https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner",
+      "description": "Rating"
+    },
+    {
+      "url": "https://img.shields.io/github/actions/workflow/status/malikrajat/dead-css-cleaner/ci.yml?branch=main&style=flat-square&label=CI",
+      "href": "https://github.com/malikrajat/dead-css-cleaner/actions/workflows/ci.yml",
+      "description": "CI status"
+    },
+    {
+      "url": "https://img.shields.io/github/license/malikrajat/dead-css-cleaner?style=flat-square",
       "href": "https://github.com/malikrajat/dead-css-cleaner/blob/main/LICENSE",
       "description": "License"
     },
     {
-      "url": "https://img.shields.io/github/v/release/malikrajat/dead-css-cleaner",
-      "href": "https://github.com/malikrajat/dead-css-cleaner/releases",
-      "description": "Latest release"
+      "url": "https://img.shields.io/badge/VS%20Code-%5E1.90.0-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white",
+      "href": "https://github.com/malikrajat/dead-css-cleaner/blob/main/package.json",
+      "description": "VS Code 1.90 or newer"
     },
     {
-      "url": "https://img.shields.io/github/issues/malikrajat/dead-css-cleaner",
-      "href": "https://github.com/malikrajat/dead-css-cleaner/issues",
-      "description": "Issues"
+      "url": "https://img.shields.io/badge/works%20with-React%20%7C%20Angular%20%7C%20Vue%20%7C%20Svelte%20%7C%20Astro-0b5cad?style=flat-square",
+      "href": "https://github.com/malikrajat/dead-css-cleaner#what-gets-scanned",
+      "description": "Supported frameworks"
+    },
+    {
+      "url": "https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square",
+      "href": "https://github.com/malikrajat/dead-css-cleaner/blob/main/CONTRIBUTING.md",
+      "description": "PRs welcome"
+    },
+    {
+      "url": "https://img.shields.io/badge/sponsor-%E2%9D%A4-db61a2?style=flat-square&logo=githubsponsors&logoColor=white",
+      "href": "https://github.com/sponsors/malikrajat",
+      "description": "Sponsor"
     }
   ],
   "engines": {
@@ -825,6 +860,7 @@
     "@babel/parser": "^7.23.0",
     "@babel/traverse": "^7.23.0",
     "@babel/types": "^7.23.0",
+    "fflate": "^0.8.3",
     "postcss": "^8.4.31",
     "postcss-less": "^6.0.0",
     "postcss-scss": "^4.0.9",

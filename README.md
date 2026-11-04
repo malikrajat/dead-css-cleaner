@@ -2,10 +2,57 @@
 
 **Find and remove unused CSS selectors in React, Angular, Vue, Svelte, Astro and plain HTML/CSS projects** - including nested child selectors, framework class bindings and single-page `index.html` + `styles.css` setups with no framework at all.
 
-[![License](https://img.shields.io/github/license/malikrajat/dead-css-cleaner)](https://github.com/malikrajat/dead-css-cleaner/blob/main/LICENSE)
-[![Latest release](https://img.shields.io/github/v/release/malikrajat/dead-css-cleaner)](https://github.com/malikrajat/dead-css-cleaner/releases)
-[![Issues](https://img.shields.io/github/issues/malikrajat/dead-css-cleaner)](https://github.com/malikrajat/dead-css-cleaner/issues)
-[![CI](https://github.com/malikrajat/dead-css-cleaner/actions/workflows/ci.yml/badge.svg)](https://github.com/malikrajat/dead-css-cleaner/actions/workflows/ci.yml)
+<p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner"><img alt="Marketplace version" src="https://img.shields.io/visual-studio-marketplace/v/RajatMalik.dead-css-cleaner?style=flat-square&label=marketplace&color=0b5cad"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner"><img alt="Installs" src="https://img.shields.io/visual-studio-marketplace/i/RajatMalik.dead-css-cleaner?style=flat-square"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner"><img alt="Downloads" src="https://img.shields.io/visual-studio-marketplace/d/RajatMalik.dead-css-cleaner?style=flat-square"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner"><img alt="Rating" src="https://img.shields.io/visual-studio-marketplace/r/RajatMalik.dead-css-cleaner?style=flat-square"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner"><img alt="Last updated" src="https://img.shields.io/visual-studio-marketplace/last-updated/RajatMalik.dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/malikrajat/dead-css-cleaner?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/malikrajat/dead-css-cleaner/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/malikrajat/dead-css-cleaner/ci.yml?branch=main&style=flat-square&label=CI"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/malikrajat/dead-css-cleaner/codeql.yml?branch=main&style=flat-square&label=CodeQL"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/actions/workflows/ci.yml"><img alt="128 unit tests" src="https://img.shields.io/badge/tests-128%20passing-brightgreen?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/blob/main/package.json"><img alt="VS Code 1.90 or newer" src="https://img.shields.io/badge/VS%20Code-%5E1.90.0-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/blob/main/package.json"><img alt="Node.js 18 or newer" src="https://img.shields.io/badge/Node.js-%3E%3D18-339933?style=flat-square&logo=nodedotjs&logoColor=white"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/blob/main/package.json"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white"></a>
+  <a href="https://biomejs.dev"><img alt="Biome" src="https://img.shields.io/badge/Biome-2.5-60A5FA?style=flat-square&logo=biome&logoColor=white"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/malikrajat/dead-css-cleaner/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/forks"><img alt="GitHub forks" src="https://img.shields.io/github/forks/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/issues"><img alt="Open issues" src="https://img.shields.io/github/issues/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/pulls"><img alt="Open pull requests" src="https://img.shields.io/github/issues-pr/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/graphs/commit-activity"><img alt="Commit activity" src="https://img.shields.io/github/commit-activity/m/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner"><img alt="Repository size" src="https://img.shields.io/github/repo-size/malikrajat/dead-css-cleaner?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner"><img alt="Top language" src="https://img.shields.io/github/languages/top/malikrajat/dead-css-cleaner?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/sponsors/malikrajat"><img alt="Sponsor" src="https://img.shields.io/badge/sponsor-%E2%9D%A4-db61a2?style=flat-square&logo=githubsponsors&logoColor=white"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/blob/main/CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner"><img alt="Maintained" src="https://img.shields.io/badge/maintained-yes-brightgreen?style=flat-square"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=RajatMalik.dead-css-cleaner"><img alt="Install in VS Code" src="https://img.shields.io/badge/install-VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white"></a>
+  <a href="https://github.com/malikrajat/dead-css-cleaner/blob/main/CHANGELOG.md"><img alt="Changelog" src="https://img.shields.io/badge/changelog-keep%20a%20changelog-orange?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <img alt="React" src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB">
+  <img alt="Angular" src="https://img.shields.io/badge/Angular-DD0031?style=flat-square&logo=angular&logoColor=white">
+  <img alt="Vue" src="https://img.shields.io/badge/Vue-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white">
+  <img alt="Svelte" src="https://img.shields.io/badge/Svelte-FF3E00?style=flat-square&logo=svelte&logoColor=white">
+  <img alt="Astro" src="https://img.shields.io/badge/Astro-BC52EE?style=flat-square&logo=astro&logoColor=white">
+  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white">
+  <img alt="CSS3" src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white">
+  <img alt="Sass" src="https://img.shields.io/badge/Sass-CC6699?style=flat-square&logo=sass&logoColor=white">
+  <img alt="Less" src="https://img.shields.io/badge/Less-1D365D?style=flat-square&logo=less&logoColor=white">
+</p>
+
 
 Dead CSS Cleaner analyses your stylesheets, works out which class and id selectors are never referenced anywhere in your components or templates, and reports them in the Problems panel with a one-click fix. Less dead CSS means a smaller stylesheet, a smaller bundle and less code to maintain.
 
@@ -24,6 +71,7 @@ Dead CSS Cleaner analyses your stylesheets, works out which class and id selecto
 - [Avoiding false positives](#avoiding-false-positives)
 - [Use it without VS Code (CLI)](#use-it-without-vs-code-cli)
 - [Troubleshooting and FAQ](#troubleshooting-and-faq)
+- [Reporting a problem](#reporting-a-problem)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
 - [License](#license)
@@ -370,11 +418,29 @@ styles.css
 
 **Can it run on a large monorepo?** Yes. Parsing is cached per file, files are processed in batches, oversized files are skipped, and a newer analysis cancels an older one. Use `excludePatterns` to skip generated or vendored folders.
 
-**Does it change my files on its own?** No. Nothing is written unless you pick a quick fix, run *Remove All Dead Selectors*, or export a report.
+**Does it change my files on its own?** No. Nothing is written unless you pick a quick fix, run *Remove All Dead Selectors*, export a report, or click **Download Log**.
 
-**Does it send telemetry?** No. There is no runtime network access, no telemetry and no uploads.
+**Does it send telemetry?** No. There is no telemetry and no automatic upload. The diagnostics bundle is written locally and only leaves your machine if you attach it to an issue or email it yourself.
 
 More help: [doc/TROUBLESHOOTING.md](doc/TROUBLESHOOTING.md) and [doc/ENHANCEMENT-NOTES.md](doc/ENHANCEMENT-NOTES.md).
+
+---
+
+## Reporting a problem
+
+If the extension fails, the error notification includes a **Download Log** button. It writes a
+ZIP file to your `Downloads` folder (or the system temp folder if `Downloads` is not writable)
+and shows the full path with **Show in Folder**, **Open GitHub Issue** and **Copy Path**
+actions.
+
+The bundle contains the session log, error stack traces, your `unusedCssDetector.*` settings,
+and the extension, VS Code, OS and Node/Electron versions. Home-directory paths are replaced
+with `<home>`, workspace roots with `<workspace>` and the working directory with `<cwd>`; no
+source files are included, so it is safe to review before sharing.
+
+Attach the ZIP to the [bug report form](https://github.com/malikrajat/dead-css-cleaner/issues/new?template=bug_report.yml)
+or email it to **support@rajatmalik.dev** with a short description of what happened. For a
+faster fix, also include the CSS rule and the component or template snippet that uses the class.
 
 ---
 
@@ -384,13 +450,15 @@ More help: [doc/TROUBLESHOOTING.md](doc/TROUBLESHOOTING.md) and [doc/ENHANCEMENT
 src/
   extension.ts        activation, commands, providers, listeners
   state.ts            one analysis session (config + analyzer + diagnostics + status bar)
-  core/               config, types, errors, logger, cache, text utilities
+  core/               config, types, errors, logger, cache, text utilities,
+                      supportBundle (redaction + ZIP formatting)
   parsers/            cssParser, jsUsageParser, markupParser, angularParser
   analysis/           analyzer, componentGraph + graphBuilder (parent/child validation),
                       usageIndex (scope-aware comparison)
   features/           diagnostics, code actions, hover, status bar, reports,
-                      componentReport (per-component listing), deadCssTreeView (sidebar)
-  test/unit/          119 dependency-free unit tests
+                      componentReport (per-component listing), deadCssTreeView (sidebar),
+                      supportBundle (download folder, toast, GitHub issue)
+  test/unit/          128 dependency-free unit tests
   test/suite/         VS Code integration tests
 dist/                 production bundle (ships in the VSIX)
 out/                  tsc output used by tests and the CLI
@@ -403,7 +471,7 @@ out/                  tsc output used by tests and the CLI
 ```bash
 npm install
 npm run check:write  # Biome: lint + format + import organisation
-npm run verify       # manifest + Biome + type check + 119 unit tests
+npm run verify       # manifest + Biome + type check + 128 unit tests
 npm test             # unit tests only
 npm run test:coverage   # unit tests with a coverage report
 npm run test:vscode     # integration tests in a real VS Code instance
@@ -420,7 +488,7 @@ Press `F5` in VS Code to launch the Extension Development Host.
 | --- | --- | --- |
 | Linting and formatting | [Biome](https://biomejs.dev) | `biome.json` |
 | Type checking | TypeScript, strict mode | `tsconfig.json` |
-| Unit tests | Mocha (TDD UI), 119 tests | `src/test/unit/` |
+| Unit tests | Mocha (TDD UI), 128 tests | `src/test/unit/` |
 | Integration tests | `@vscode/test-electron` | `src/test/suite/` |
 | Coverage | c8 | `npm run test:coverage` |
 | Bundling | webpack | `dist/extension.js` |
