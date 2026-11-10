@@ -4,6 +4,23 @@ All notable changes to **Dead CSS Cleaner** are documented here.
 The project follows [Semantic Versioning](https://semver.org/) and the
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [2.2.0] - 2026-11-07
+
+### Added
+
+- **Single-file log + Export Logs button.** Dead CSS Cleaner now writes every log record and
+  error to one `dead-css-cleaner.log` file while it runs, creating it with a header on startup
+  even when nothing has been logged yet. The error notification shows a single **Export Logs**
+  button that rebuilds the complete file (environment, errors and full session log) and opens it
+  in Notepad on Windows (or the default text handler elsewhere). The same action is available
+  from the Command Palette and as a button in the **Dead CSS by component** view.
+- **Diagnostics bundle in the Command Palette.** The existing ZIP export is now contributed as
+  **Dead CSS Cleaner: Download Diagnostics Bundle** so it can be run without waiting for an
+  error notification.
+- **Visual user guide.** `doc/USER-GUIDE.md` walks through installation, running the analysis,
+  exporting the log and sending it, with 1280x800 screenshots. The editable HTML sources and the
+  exported PNGs live in `doc/screenshots/`.
+
 ## [2.1.0] - 2026-11-03
 
 Support release: when something goes wrong, users can now send a complete diagnostics bundle
@@ -271,6 +288,7 @@ real edge-case handling, and makes every failure path recoverable.
   parsing, Babel JSX parsing, Problems panel diagnostics, status bar count, hover tooltips
   and auto-analysis on save/open.
 
+[2.2.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.4.0...v2.0.0
 [1.2.0]: https://github.com/malikrajat/dead-css-cleaner/compare/v1.1.0...v1.2.0

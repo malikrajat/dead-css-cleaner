@@ -3,7 +3,7 @@
   "name": "dead-css-cleaner",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "publisher": "RajatMalik",
   "license": "MIT",
   "icon": "icon.png",
@@ -211,6 +211,18 @@
         "icon": "$(output)"
       },
       {
+        "command": "unusedCssDetector.exportLogs",
+        "title": "%command.exportLogs.title%",
+        "category": "%command.category%",
+        "icon": "$(export)"
+      },
+      {
+        "command": "unusedCssDetector.downloadDiagnostics",
+        "title": "%command.downloadDiagnostics.title%",
+        "category": "%command.category%",
+        "icon": "$(cloud-download)"
+      },
+      {
         "command": "unusedCssDetector.openSettings",
         "title": "%command.openSettings.title%",
         "category": "%command.category%",
@@ -305,6 +317,12 @@
           "when": "workspaceHasFiles"
         },
         {
+          "command": "unusedCssDetector.exportLogs"
+        },
+        {
+          "command": "unusedCssDetector.downloadDiagnostics"
+        },
+        {
           "command": "unusedCssDetector.openSettings",
           "when": "workspaceHasFiles"
         },
@@ -378,6 +396,11 @@
           "command": "unusedCssDetector.copyDeadCssList",
           "when": "view == deadCssCleaner.deadSelectors",
           "group": "navigation@3"
+        },
+        {
+          "command": "unusedCssDetector.exportLogs",
+          "when": "view == deadCssCleaner.deadSelectors",
+          "group": "navigation@4"
         }
       ],
       "view/item/context": [
@@ -851,7 +874,9 @@
     "test:vscode": "npm run build:dev && npm run test:compile --silent && node ./out/test/runTest.js",
     "analyze": "npm run build:cli --silent && node ./scripts/analyze-folder.js",
     "package": "npm run build && vsce package",
+    "package:vsix": "npm run build && vsce package",
     "package:dev": "npm run build:dev && vsce package --no-dependencies",
+    "install:vsix": "node ./scripts/install-vsix.js",
     "publish": "npm run build && vsce publish",
     "publish:minor": "npm run build && vsce publish minor",
     "install-vsce": "npm install -g @vscode/vsce"

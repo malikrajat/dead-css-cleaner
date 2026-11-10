@@ -13,6 +13,8 @@ const EXPECTED_COMMANDS = [
     'unusedCssDetector.showErrors',
     'unusedCssDetector.clearErrors',
     'unusedCssDetector.showLog',
+    'unusedCssDetector.exportLogs',
+    'unusedCssDetector.downloadDiagnostics',
     'unusedCssDetector.openSettings',
     'unusedCssDetector.showComponentReport',
     'unusedCssDetector.copyDeadCssList',

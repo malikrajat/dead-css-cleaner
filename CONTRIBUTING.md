@@ -85,6 +85,8 @@ Open the folder in VS Code and press `F5`. This launches an Extension Developmen
 | `npm run verify:guard` | Proves the CI branch guard allows main/main-tags and blocks everything else |
 | `npm run analyze -- <folder>` | Standalone CLI using the real pipeline |
 | `npm run package` | Build a `.vsix` |
+| `npm run package:vsix` | Build a `.vsix` (same as `npm run package`) |
+| `npm run install:vsix` | Install the newest built `.vsix` into VS Code |
 | `npm run optimize:icon` | Re-generate `icon.png` from `images/icon-source.png` |
 
 ---
@@ -227,7 +229,7 @@ npm run verify:manifest   # name/version rules, keyword limits, icon, capabiliti
 npm run package           # produces dead-css-cleaner-<version>.vsix
 ```
 
-Install the produced VSIX (`code --install-extension dead-css-cleaner-<version>.vsix`) and click through the extension once before releasing. [doc/MANIFEST.md](doc/MANIFEST.md) documents every manifest field and the Marketplace rules that matter.
+Install the produced VSIX with `npm run install:vsix` (or `code --install-extension dead-css-cleaner-<version>.vsix`) and click through the extension once before releasing. [doc/MANIFEST.md](doc/MANIFEST.md) documents every manifest field and the Marketplace rules that matter.
 
 Continuous integration (`.github/workflows/ci.yml`) runs one job per step, so a failure points at exactly one concern:
 

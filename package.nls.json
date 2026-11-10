@@ -13,6 +13,8 @@
   "command.showErrors.title": "Show Analysis Diagnostics Log",
   "command.clearErrors.title": "Clear Diagnostics Log",
   "command.showLog.title": "Show Output Log",
+  "command.exportLogs.title": "Export Logs",
+  "command.downloadDiagnostics.title": "Download Diagnostics Bundle",
   "command.openSettings.title": "Open Settings",
   "command.afterEdit.title": "Refresh analysis after an edit (internal)",
   "command.showComponentReport.title": "Show Dead CSS Report (grouped by component)",

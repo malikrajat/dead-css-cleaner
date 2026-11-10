@@ -95,26 +95,29 @@ No usages were found at all. The usual causes:
 
 ## Collecting diagnostics
 
-### One-click bundle
+### One-click export
 
-When an error notification appears, choose **Download Log**. The extension writes
-`dead-css-cleaner-diagnostics-<timestamp>.zip` to your `Downloads` folder (or the system temp
-folder if `Downloads` is not writable) and shows the path with **Show in Folder**,
-**Open GitHub Issue** and **Copy Path** actions.
+Logs are written to a single `dead-css-cleaner.log` file while the extension runs. When an error
+notification appears, choose **Export Logs**. The extension rebuilds that file with the full
+session log, every error and environment details, then opens it in Notepad (or your default text
+editor on macOS/Linux). You can also run **Dead CSS Cleaner: Export Logs** from the Command
+Palette or use the export button in the **Dead CSS by component** view.
 
-| File | Contents |
+The file contains:
+
+| Section | Contents |
 | --- | --- |
-| `diagnostics.txt` | Environment, settings, last-analysis stats, errors and the full log in one readable file. |
-| `log.txt` | Raw session log (up to 5,000 records). |
-| `errors.json` | Error records with stack traces, newest first. |
-| `environment.json` | Extension, VS Code, OS and Node/Electron versions. |
-| `settings.json` | Every `unusedCssDetector.*` setting, its value, source and default. |
-| `README.txt` | What the bundle contains and where to send it. |
+| Environment | Extension, VS Code, OS and Node/Electron versions. |
+| Errors | Every recorded error with its stack trace, newest first. |
+| Log | The full session log (up to 5,000 records). |
 
-Home-directory paths are replaced with `<home>`, workspace roots with `<workspace>` and the
-working directory with `<cwd>`; no source files are included. Attach the ZIP to the
+No source files are included. Attach the log to the
 [bug report form](https://github.com/malikrajat/dead-css-cleaner/issues/new/choose) or email it
 to **support@rajatmalik.dev**.
+
+For a ZIP bundle that also includes your `unusedCssDetector.*` settings and analysis statistics,
+run **Dead CSS Cleaner: Download Diagnostics Bundle** from the Command Palette. Its
+`diagnostics.txt` file contains the same environment, errors and log in one readable document.
 
 ### Manual collection
 

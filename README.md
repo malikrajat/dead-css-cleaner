@@ -307,6 +307,8 @@ Dead CSS Cleaner parses your stylesheets into class/id tokens with exact source 
 | **Show Analysis Diagnostics Log** | Recovered parse problems and warnings | - |
 | **Clear Diagnostics Log** | Empties the diagnostics log | - |
 | **Show Output Log** | Opens the output channel (`debugLogging`) | - |
+| **Export Logs** | Writes the complete log to one file and opens it in Notepad | - |
+| **Download Diagnostics Bundle** | Writes a ZIP with logs, errors, settings and environment | - |
 | **Open Settings** | Filters Settings to this extension | - |
 
 ---
@@ -418,7 +420,7 @@ styles.css
 
 **Can it run on a large monorepo?** Yes. Parsing is cached per file, files are processed in batches, oversized files are skipped, and a newer analysis cancels an older one. Use `excludePatterns` to skip generated or vendored folders.
 
-**Does it change my files on its own?** No. Nothing is written unless you pick a quick fix, run *Remove All Dead Selectors*, export a report, or click **Download Log**.
+**Does it change my files on its own?** No. Nothing is written unless you pick a quick fix, run *Remove All Dead Selectors*, export a report, or click **Export Logs**.
 
 **Does it send telemetry?** No. There is no telemetry and no automatic upload. The diagnostics bundle is written locally and only leaves your machine if you attach it to an issue or email it yourself.
 
@@ -428,19 +430,22 @@ More help: [doc/TROUBLESHOOTING.md](doc/TROUBLESHOOTING.md) and [doc/ENHANCEMENT
 
 ## Reporting a problem
 
-If the extension fails, the error notification includes a **Download Log** button. It writes a
-ZIP file to your `Downloads` folder (or the system temp folder if `Downloads` is not writable)
-and shows the full path with **Show in Folder**, **Open GitHub Issue** and **Copy Path**
-actions.
+If the extension fails, the error notification includes a single **Export Logs** button. Logs are
+also written to `dead-css-cleaner.log` while the extension runs. Clicking **Export Logs** rebuilds
+that one file with the full session log, every error and the environment details, then opens it in
+Notepad (or your default text editor on macOS/Linux).
 
-The bundle contains the session log, error stack traces, your `unusedCssDetector.*` settings,
-and the extension, VS Code, OS and Node/Electron versions. Home-directory paths are replaced
-with `<home>`, workspace roots with `<workspace>` and the working directory with `<cwd>`; no
-source files are included, so it is safe to review before sharing.
+The log contains the session log, error stack traces and the extension, VS Code, OS and
+Node/Electron versions. No source files are included, so it is safe to review before sharing.
 
-Attach the ZIP to the [bug report form](https://github.com/malikrajat/dead-css-cleaner/issues/new?template=bug_report.yml)
+For a ZIP bundle that also includes your settings and analysis statistics, run
+**Dead CSS Cleaner: Download Diagnostics Bundle** from the Command Palette. Attach either file to
+the [bug report form](https://github.com/malikrajat/dead-css-cleaner/issues/new?template=bug_report.yml)
 or email it to **support@rajatmalik.dev** with a short description of what happened. For a
 faster fix, also include the CSS rule and the component or template snippet that uses the class.
+
+See the [visual guide](doc/USER-GUIDE.md) for screenshots of the installation, the findings view,
+the **Export Logs** action and the two ways to send the log.
 
 ---
 
@@ -478,6 +483,8 @@ npm run test:vscode     # integration tests in a real VS Code instance
 npm run build           # production bundle -> dist/extension.js
 npm run watch           # webpack watch mode
 npm run package         # build a .vsix for the Marketplace
+npm run package:vsix    # same as `package` (explicit VSIX command)
+npm run install:vsix    # install the newest built .vsix into VS Code
 ```
 
 Press `F5` in VS Code to launch the Extension Development Host.

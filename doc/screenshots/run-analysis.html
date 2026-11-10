@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Run the analysis</title>
+<style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #1e1e1e; }
+    body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; color: #cccccc; }
+    .shot { position: relative; width: 1280px; height: 800px; overflow: hidden; background: #1e1e1e; }
+    .titlebar {
+        height: 40px; background: #3c3c3c; display: flex; align-items: center; padding: 0 14px;
+        gap: 16px; font-size: 13px; color: #cccccc; border-bottom: 1px solid #2b2b2b;
+    }
+    .traffic { display: flex; gap: 7px; margin-right: 8px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+    .menus { display: flex; gap: 15px; color: #bfbfbf; }
+    .title { flex: 1; text-align: center; color: #d7d7d7; font-size: 13px; }
+    .body { display: flex; height: 738px; }
+    .activity {
+        width: 52px; background: #333333; display: flex; flex-direction: column; align-items: center;
+        padding-top: 10px; gap: 6px; border-right: 1px solid #2b2b2b;
+    }
+    .act { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #858585; font-size: 20px; border-left: 2px solid transparent; }
+    .act.active { color: #ffffff; border-left-color: #ffffff; }
+    .explorer { width: 250px; background: #252526; border-right: 1px solid #2b2b2b; }
+    .panel-head {
+        height: 40px; display: flex; align-items: center; justify-content: space-between;
+        padding: 0 16px; font-size: 11px; letter-spacing: .08em; color: #bbbbbb; text-transform: uppercase;
+    }
+    .tree { font-size: 12px; color: #cccccc; padding-top: 2px; }
+    .row { height: 24px; display: flex; align-items: center; padding-left: 14px; gap: 7px; white-space: nowrap; }
+    .row.folder { color: #d7d7d7; font-weight: 600; }
+    .row.indent { padding-left: 30px; }
+    .row.indent2 { padding-left: 46px; }
+    .row.active { background: #37373d; color: #ffffff; }
+    .ico { width: 14px; text-align: center; font-size: 11px; opacity: .85; }
+    .editor-wrap { flex: 1; display: flex; flex-direction: column; min-width: 0; background: #1e1e1e; }
+    .tabs { height: 36px; background: #2d2d2d; display: flex; align-items: stretch; border-bottom: 1px solid #252526; }
+    .tab { display: flex; align-items: center; gap: 7px; padding: 0 14px; font-size: 12px; color: #9d9d9d; border-right: 1px solid #252526; }
+    .tab.active { background: #1e1e1e; color: #e7e7e7; border-top: 1px solid #007acc; }
+    .code { flex: 1; padding: 18px 22px; font-family: "Cascadia Code", "Consolas", monospace; font-size: 13px; line-height: 22px; overflow: hidden; }
+    .ln { display: flex; white-space: pre; }
+    .gutter { width: 38px; flex: 0 0 38px; color: #6e7681; text-align: right; padding-right: 16px; user-select: none; }
+    .kw { color: #569cd6; } .sel { color: #d7ba7d; } .prop { color: #9cdcfe; } .val { color: #ce9178; }
+    .com { color: #6a9955; } .punc { color: #d4d4d4; } .bad { color: #f48771; text-decoration: wavy underline #f14c4c; text-underline-offset: 3px; }
+    .line-bad { background: rgba(241,76,76,.08); }
+    .problems { height: 176px; background: #1e1e1e; border-top: 1px solid #3c3c3c; }
+    .problems-head { height: 34px; display: flex; align-items: center; gap: 18px; padding: 0 16px; font-size: 12px; color: #cccccc; border-bottom: 1px solid #2b2b2b; }
+    .problems-head strong { color: #ffffff; }
+    .pcount { background: #4d4d4d; border-radius: 9px; padding: 0 6px; font-size: 10px; color: #fff; }
+    .prob { display: flex; gap: 9px; padding: 5px 18px; font-size: 12px; color: #cccccc; }
+    .prob .warn { color: #cca700; }
+    .prob .file { color: #9d9d9d; margin-left: auto; }
+    .rightbar { width: 360px; background: #252526; border-left: 1px solid #2b2b2b; }
+    .view-title { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: #bbbbbb; }
+    .view-title .count { background: #007acc; color: #fff; border-radius: 10px; padding: 1px 8px; font-size: 10px; letter-spacing: 0; }
+    .comp { padding: 8px 16px; border-top: 1px solid #2f2f2f; }
+    .comp-title { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #e7e7e7; font-weight: 600; }
+    .comp-sub { font-size: 11px; color: #8f8f8f; margin: 3px 0 4px 21px; }
+    .finding { display: flex; align-items: center; gap: 8px; padding: 5px 0 5px 21px; font-size: 12px; color: #d7ba7d; font-family: "Cascadia Code", monospace; }
+    .finding .w { color: #cca700; font-family: "Segoe UI", sans-serif; }
+    .finding .meta { color: #8f8f8f; font-family: "Segoe UI", sans-serif; font-size: 10px; margin-left: auto; }
+    .callout {
+        position: absolute; background: #ffcc00; color: #1b1b1b; font-size: 12px; font-weight: 700;
+        padding: 5px 10px; border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,.45);
+        display: flex; align-items: center; gap: 6px; z-index: 5;
+    }
+    .callout .n { width: 17px; height: 17px; border-radius: 50%; background: #1b1b1b; color: #ffcc00; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+    .c1 { left: 66px; top: 118px; }
+    .c2 { right: 22px; top: 88px; }
+    .c3 { right: 22px; bottom: 220px; }
+    .statusbar { height: 22px; background: #007acc; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; }
+    .statusbar .left, .statusbar .right { display: flex; align-items: center; gap: 14px; }
+    .statusbar .warn { background: #cca700; color: #1b1b1b; padding: 0 8px; height: 22px; display: flex; align-items: center; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="shot" id="shot">
+    <div class="titlebar">
+        <div class="traffic"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="menus"><span>File</span><span>Edit</span><span>Selection</span><span>View</span><span>Go</span><span>Run</span><span>Terminal</span><span>Help</span></div>
+        <div class="title">app.component.scss — my-angular-app — Visual Studio Code</div>
+    </div>
+
+    <div class="body">
+        <div class="activity">
+            <div class="act active">🗎</div>
+            <div class="act">🔍</div>
+            <div class="act">⎇</div>
+            <div class="act">▷</div>
+            <div class="act">⧉</div>
+            <div class="act">▦</div>
+            <div class="act">⚙</div>
+        </div>
+
+        <div class="explorer">
+            <div class="panel-head"><span>Explorer</span><span>⋯</span></div>
+            <div class="tree">
+                <div class="row folder">▾ MY-ANGULAR-APP</div>
+                <div class="row indent">▾ src</div>
+                <div class="row indent2">▾ app</div>
+                <div class="row indent2" style="padding-left: 62px;">🗎 app.component.html</div>
+                <div class="row indent2 active" style="padding-left: 62px;">🗎 app.component.scss</div>
+                <div class="row indent2" style="padding-left: 62px;">🗎 app.component.ts</div>
+                <div class="row indent2" style="padding-left: 62px;">🗎 card.component.scss</div>
+                <div class="row indent">▸ styles</div>
+                <div class="row">🗎 angular.json</div>
+                <div class="row">🗎 package.json</div>
+            </div>
+        </div>
+
+        <div class="editor-wrap">
+            <div class="tabs">
+                <div class="tab active"><span>SCSS</span> app.component.scss <span style="margin-left:10px;color:#9d9d9d;">●</span></div>
+                <div class="tab">app.component.html</div>
+            </div>
+            <div class="code">
+                <div class="ln"><span class="gutter">1</span><span><span class="sel">.card</span> <span class="punc">{</span></span></div>
+                <div class="ln"><span class="gutter">2</span><span>  <span class="prop">display</span><span class="punc">:</span> <span class="val">flex</span><span class="punc">;</span></span></div>
+                <div class="ln"><span class="gutter">3</span><span>  <span class="prop">gap</span><span class="punc">:</span> <span class="val">12px</span><span class="punc">;</span></span></div>
+                <div class="ln"><span class="gutter">4</span><span><span class="punc">}</span></span></div>
+                <div class="ln"><span class="gutter">5</span><span></span></div>
+                <div class="ln line-bad"><span class="gutter">6</span><span><span class="sel bad">.card__legacy-note</span> <span class="punc">{</span> <span class="com">// dead selector</span></span></div>
+                <div class="ln line-bad"><span class="gutter">7</span><span>  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">12px</span><span class="punc">;</span></span></div>
+                <div class="ln"><span class="gutter">8</span><span><span class="punc">}</span></span></div>
+                <div class="ln"><span class="gutter">9</span><span></span></div>
+                <div class="ln line-bad"><span class="gutter">10</span><span><span class="sel bad">.old-banner</span> <span class="punc">{</span> <span class="com">// dead selector</span></span></div>
+                <div class="ln line-bad"><span class="gutter">11</span><span>  <span class="prop">background</span><span class="punc">:</span> <span class="val">#ff0</span><span class="punc">;</span></span></div>
+                <div class="ln"><span class="gutter">12</span><span><span class="punc">}</span></span></div>
+                <div class="ln"><span class="gutter">13</span><span></span></div>
+                <div class="ln"><span class="gutter">14</span><span><span class="sel">.card .title</span> <span class="punc">{</span></span></div>
+                <div class="ln"><span class="gutter">15</span><span>  <span class="prop">font-weight</span><span class="punc">:</span> <span class="val">700</span><span class="punc">;</span></span></div>
+                <div class="ln"><span class="gutter">16</span><span><span class="punc">}</span></span></div>
+            </div>
+
+            <div class="problems">
+                <div class="problems-head"><strong>Problems</strong><span>12</span><span style="color:#cca700;">● 12 warnings</span><span style="color:#9d9d9d;margin-left:auto;">app.component.scss</span></div>
+                <div class="prob"><span class="warn">⚠</span><span>Dead CSS class: <strong>.card__legacy-note</strong> — Checked: AppComponent + 3 child components</span><span class="file">app.component.scss [6, 1]</span></div>
+                <div class="prob"><span class="warn">⚠</span><span>Dead CSS class: <strong>.old-banner</strong> — no usage found in the workspace</span><span class="file">app.component.scss [10, 1]</span></div>
+                <div class="prob"><span class="warn">⚠</span><span>Dead CSS class: <strong>.promo-badge</strong> — partially dead selector</span><span class="file">card.component.scss [22, 1]</span></div>
+            </div>
+        </div>
+
+        <div class="rightbar">
+            <div class="view-title"><span>Dead CSS by component</span><span class="count">12</span></div>
+            <div class="comp">
+                <div class="comp-title"><span style="color:#cca700;">▾</span> 🗎 app.component.scss</div>
+                <div class="comp-sub">AppComponent + 3 child components</div>
+                <div class="finding"><span class="w">⚠</span>.card__legacy-note <span class="meta">L6</span></div>
+                <div class="finding"><span class="w">⚠</span>.old-banner <span class="meta">L10</span></div>
+            </div>
+            <div class="comp">
+                <div class="comp-title"><span style="color:#cca700;">▾</span> 🗎 card.component.scss</div>
+                <div class="comp-sub">CardComponent + 1 child component</div>
+                <div class="finding"><span class="w">⚠</span>.promo-badge <span class="meta">L22</span></div>
+                <div class="finding"><span class="w">⚠</span>.card__footer--legacy <span class="meta">L41</span></div>
+            </div>
+            <div class="comp">
+                <div class="comp-title"><span style="color:#cca700;">▾</span> 🗎 global.scss</div>
+                <div class="comp-sub">Global stylesheet</div>
+                <div class="finding"><span class="w">⚠</span>.legacy-tooltip <span class="meta">L8</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout c1"><span class="n">1</span> Run analysis</div>
+    <div class="callout c2"><span class="n">2</span> Review findings</div>
+    <div class="callout c3"><span class="n">3</span> Fix with one click</div>
+
+    <div class="statusbar">
+        <div class="left"><span class="warn">⚠ 12 dead CSS selectors</span><span>main*</span><span>⊗ 0  △ 0</span></div>
+        <div class="right"><span>Ln 1, Col 1</span><span>Spaces: 2</span><span>UTF-8</span><span>SCSS</span></div>
+    </div>
+</div>
+</body>
+</html>

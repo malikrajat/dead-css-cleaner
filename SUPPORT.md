@@ -29,11 +29,15 @@ Open an issue with the [bug report form](https://github.com/malikrajat/dead-css-
 
 ## Sending logs and diagnostics
 
-When an error notification appears, choose **Download Log**. The extension writes a ZIP file to your `Downloads` folder (or the system temp folder if `Downloads` is not writable) and shows the path with **Show in Folder**, **Open GitHub Issue** and **Copy Path** actions.
+When an error notification appears, choose **Export Logs**. The extension rebuilds a single `dead-css-cleaner.log` file with the full session log, every error and environment details, then opens it in Notepad (or your default text editor on macOS/Linux).
 
-The bundle contains the session log, error stack traces, your `unusedCssDetector.*` settings, and the extension, VS Code, OS and Node/Electron versions. Home-directory paths are replaced with `<home>`, workspace roots with `<workspace>` and the working directory with `<cwd>`; no source files are included. Review the text files before sharing if project names are sensitive.
+The same file is written continuously while the extension runs. No source files are included. Review it before sharing if project names are sensitive.
 
-Attach the ZIP to the issue, or email it to **support@rajatmalik.dev** with a short description of what happened.
+For a ZIP that also contains your `unusedCssDetector.*` settings and analysis statistics, run **Dead CSS Cleaner: Download Diagnostics Bundle** from the Command Palette.
+
+Attach the log (or ZIP) to the issue, or email it to **support@rajatmalik.dev** with a short description of what happened.
+
+See the [visual guide](doc/USER-GUIDE.md) for screenshots of installation, the findings view, the **Export Logs** action and both ways to send the log.
 
 ## Before you report
 
