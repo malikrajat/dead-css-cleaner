@@ -2,6 +2,7 @@ import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { CssAnalyzer } from './analysis/analyzer';
 import type { UsageIndex } from './analysis/usageIndex';
+import { EXPORT_LOGS_COMMAND } from './core/commandIds';
 import type { ExtensionConfig } from './core/config';
 import { ErrorCollector, errorMessage } from './core/errors';
 import { logger } from './core/logger';
@@ -142,7 +143,13 @@ export class ExtensionState {
             const record = ErrorCollector.from('general', 'Analysis failed', error, { recoverable: false });
             this.statusBar.setFailed(record.message);
             if (!options.silent) {
-                vscode.window.showErrorMessage(`Dead CSS Cleaner: ${errorMessage(error)}`);
+                vscode.window
+                    .showErrorMessage(`Dead CSS Cleaner: ${errorMessage(error)}`, 'Export Logs')
+                    .then((action) => {
+                        if (action === 'Export Logs') {
+                            vscode.commands.executeCommand(EXPORT_LOGS_COMMAND);
+                        }
+                    });
             }
             return undefined;
         } finally {

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Export the logs</title>
+<style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #1e1e1e; }
+    body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; color: #cccccc; }
+    .shot { position: relative; width: 1280px; height: 800px; overflow: hidden; background: #1e1e1e; }
+    .titlebar { height: 40px; background: #3c3c3c; display: flex; align-items: center; padding: 0 14px; gap: 16px; font-size: 13px; border-bottom: 1px solid #2b2b2b; }
+    .traffic { display: flex; gap: 7px; margin-right: 8px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+    .menus { display: flex; gap: 15px; color: #bfbfbf; }
+    .title { flex: 1; text-align: center; color: #d7d7d7; font-size: 13px; }
+    .body { display: flex; height: 738px; }
+    .activity { width: 52px; background: #333333; display: flex; flex-direction: column; align-items: center; padding-top: 10px; gap: 6px; }
+    .act { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #858585; font-size: 20px; }
+    .act.active { color: #ffffff; border-left: 2px solid #fff; }
+    .explorer { width: 250px; background: #252526; border-right: 1px solid #2b2b2b; }
+    .panel-head { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-size: 11px; letter-spacing: .08em; color: #bbbbbb; text-transform: uppercase; }
+    .tree { font-size: 12px; padding-top: 2px; }
+    .row { height: 24px; display: flex; align-items: center; padding-left: 14px; gap: 7px; }
+    .row.folder { color: #d7d7d7; font-weight: 600; }
+    .row.indent { padding-left: 30px; } .row.indent2 { padding-left: 46px; }
+    .row.active { background: #37373d; color: #fff; }
+    .editor { flex: 1; background: #1e1e1e; }
+    .tabs { height: 36px; background: #2d2d2d; display: flex; border-bottom: 1px solid #252526; }
+    .tab { display: flex; align-items: center; gap: 7px; padding: 0 14px; font-size: 12px; color: #9d9d9d; border-right: 1px solid #252526; }
+    .tab.active { background: #1e1e1e; color: #e7e7e7; border-top: 1px solid #007acc; }
+    .code { padding: 18px 22px; font-family: "Cascadia Code", Consolas, monospace; font-size: 13px; line-height: 22px; color: #d4d4d4; }
+    .ln { display: flex; white-space: pre; }
+    .gutter { width: 38px; flex: 0 0 38px; color: #6e7681; text-align: right; padding-right: 16px; }
+    .kw { color: #569cd6; } .sel { color: #d7ba7d; } .prop { color: #9cdcfe; } .val { color: #ce9178; } .com { color: #6a9955; }
+
+    .dimmer { position: absolute; inset: 40px 0 22px 0; background: rgba(0,0,0,.42); z-index: 2; }
+
+    .palette {
+        position: absolute; left: 188px; top: 84px; width: 640px; z-index: 6;
+        background: #252526; border: 1px solid #454545; border-radius: 5px;
+        box-shadow: 0 12px 34px rgba(0,0,0,.55); overflow: hidden;
+    }
+    .palette-input { height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: #3c3c3c; border-bottom: 1px solid #454545; font-size: 13px; color: #e7e7e7; }
+    .palette-input .chev { color: #9d9d9d; }
+    .palette-list { padding: 5px 0; }
+    .palette-item { height: 32px; display: flex; align-items: center; gap: 9px; padding: 0 14px; font-size: 13px; color: #cccccc; }
+    .palette-item.sel { background: #04395e; color: #ffffff; }
+    .palette-item .cmd { color: #9d9d9d; font-size: 11px; margin-left: auto; }
+    .palette-item.sel .cmd { color: #bcd8ef; }
+
+    .notif {
+        position: absolute; left: 188px; bottom: 46px; width: 380px; z-index: 7;
+        background: #252526; border: 1px solid #454545; border-left: 4px solid #cca700;
+        border-radius: 5px; box-shadow: 0 12px 34px rgba(0,0,0,.55); padding: 14px 16px;
+    }
+    .notif-title { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; color: #ffffff; }
+    .notif-title .warn { color: #cca700; font-size: 16px; }
+    .notif-msg { font-size: 12px; color: #bdbdbd; line-height: 1.45; margin: 6px 0 11px 25px; }
+    .notif-actions { display: flex; gap: 8px; margin-left: 25px; }
+    .notif-btn {
+        background: #0e639c; color: #ffffff; border: none; border-radius: 2px; padding: 6px 14px;
+        font-size: 12px; font-weight: 600; font-family: inherit;
+    }
+    .notif-btn.focus { outline: 2px solid #ffcc00; outline-offset: 2px; }
+    .notif-close { position: absolute; right: 10px; top: 9px; color: #9d9d9d; font-size: 15px; }
+
+    .notepad {
+        position: absolute; left: 586px; top: 208px; width: 646px; height: 512px; z-index: 8;
+        background: #ffffff; color: #1b1b1b; border: 1px solid #8a8a8a; border-radius: 6px;
+        box-shadow: 0 18px 46px rgba(0,0,0,.65); overflow: hidden;
+    }
+    .np-titlebar { height: 34px; background: #f3f3f3; border-bottom: 1px solid #d8d8d8; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 12px; color: #2b2b2b; }
+    .np-icon { width: 16px; height: 16px; border-radius: 3px; background: #2f6fed; }
+    .np-titlebar .file { font-weight: 600; }
+    .np-menu { display: flex; gap: 12px; font-size: 11px; color: #4d4d4d; margin-left: 4px; }
+    .np-win { margin-left: auto; display: flex; gap: 14px; color: #6b6b6b; font-size: 13px; }
+    .np-body { padding: 12px 16px; font-family: "Consolas", "Cascadia Code", monospace; font-size: 11.5px; line-height: 17px; color: #1e1e1e; }
+    .np-body .h { color: #0b5cad; font-weight: 700; }
+    .np-body .sec { color: #7a3e9d; font-weight: 700; }
+    .np-body .err { color: #b42318; }
+    .np-body .info { color: #0f6b3f; }
+    .np-body .dim { color: #666666; }
+    .np-body .highlight { background: #fff2a8; }
+
+    .callout { position: absolute; background: #ffcc00; color: #1b1b1b; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,.5); display: flex; align-items: center; gap: 6px; z-index: 12; }
+    .callout .n { width: 17px; height: 17px; border-radius: 50%; background: #1b1b1b; color: #ffcc00; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+    .c1 { left: 188px; bottom: 176px; }
+    .c2 { right: 46px; top: 180px; }
+    .c3 { left: 188px; top: 52px; }
+    .statusbar { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: #007acc; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; z-index: 1; }
+    .statusbar .left, .statusbar .right { display: flex; align-items: center; gap: 14px; }
+</style>
+</head>
+<body>
+<div class="shot" id="shot">
+    <div class="titlebar">
+        <div class="traffic"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="menus"><span>File</span><span>Edit</span><span>Selection</span><span>View</span><span>Go</span><span>Run</span><span>Terminal</span><span>Help</span></div>
+        <div class="title">app.component.scss — my-angular-app — Visual Studio Code</div>
+    </div>
+
+    <div class="body">
+        <div class="activity">
+            <div class="act active">🗎</div><div class="act">🔍</div><div class="act">⎇</div>
+            <div class="act">▷</div><div class="act">⧉</div><div class="act">▦</div><div class="act">⚙</div>
+        </div>
+        <div class="explorer">
+            <div class="panel-head"><span>Explorer</span><span>⋯</span></div>
+            <div class="tree">
+                <div class="row folder">▾ MY-ANGULAR-APP</div>
+                <div class="row indent">▾ src</div>
+                <div class="row indent2">▾ app</div>
+                <div class="row" style="padding-left:62px;">🗎 app.component.html</div>
+                <div class="row active" style="padding-left:62px;">🗎 app.component.scss</div>
+                <div class="row" style="padding-left:62px;">🗎 app.component.ts</div>
+                <div class="row indent">▸ styles</div>
+                <div class="row">🗎 angular.json</div>
+            </div>
+        </div>
+        <div class="editor">
+            <div class="tabs"><div class="tab active"><span>SCSS</span> app.component.scss</div><div class="tab">app.component.html</div></div>
+            <div class="code">
+                <div class="ln"><span class="gutter">1</span><span><span class="sel">.card</span> {</span></div>
+                <div class="ln"><span class="gutter">2</span><span>  <span class="prop">display</span>: <span class="val">flex</span>;</span></div>
+                <div class="ln"><span class="gutter">3</span><span>  <span class="prop">gap</span>: <span class="val">12px</span>;</span></div>
+                <div class="ln"><span class="gutter">4</span><span>}</span></div>
+                <div class="ln"><span class="gutter">5</span><span></span></div>
+                <div class="ln"><span class="gutter">6</span><span><span class="sel">.card__legacy-note</span> {</span></div>
+                <div class="ln"><span class="gutter">7</span><span>  <span class="prop">font-size</span>: <span class="val">12px</span>;</span></div>
+                <div class="ln"><span class="gutter">8</span><span>}</span></div>
+                <div class="ln"><span class="gutter">9</span><span></span></div>
+                <div class="ln"><span class="gutter">10</span><span><span class="com">/* ... */</span></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dimmer"></div>
+
+    <div class="palette">
+        <div class="palette-input"><span class="chev">›</span><span>Dead CSS Cleaner: Export Logs</span></div>
+        <div class="palette-list">
+            <div class="palette-item sel"><span>⇥</span><span>Dead CSS Cleaner: Export Logs</span><span class="cmd">Dead CSS Cleaner</span></div>
+            <div class="palette-item"><span>⇥</span><span>Dead CSS Cleaner: Download Diagnostics Bundle</span><span class="cmd">Dead CSS Cleaner</span></div>
+            <div class="palette-item"><span>⇥</span><span>Dead CSS Cleaner: Show Output Log</span><span class="cmd">Dead CSS Cleaner</span></div>
+        </div>
+    </div>
+
+    <div class="notif">
+        <div class="notif-title"><span class="warn">⚠</span> Dead CSS Cleaner: Analysis failed</div>
+        <div class="notif-msg">The extension recorded the error and wrote it to the log. Click <strong>Export Logs</strong> to open the complete log in Notepad.</div>
+        <div class="notif-actions"><button type="button" class="notif-btn focus">Export Logs</button></div>
+        <div class="notif-close">×</div>
+    </div>
+
+    <div class="notepad">
+        <div class="np-titlebar">
+            <span class="np-icon"></span><span class="file">dead-css-cleaner.log</span><span>— Notepad</span>
+            <span class="np-menu"><span>File</span><span>Edit</span><span>Format</span><span>View</span><span>Help</span></span>
+            <span class="np-win">— ▢ ✕</span>
+        </div>
+        <div class="np-body">
+            <div class="h">Dead CSS Cleaner - complete log</div>
+            <div class="dim">Generated: 2026-11-07T10:42:19.004Z</div>
+            <div class="dim">Extension: 2.2.0</div>
+            <div><br></div>
+            <div class="sec">== Environment ==</div>
+            <div>extensionVersion: 2.2.0</div>
+            <div>vscodeVersion: 1.95.0</div>
+            <div>platform: win32</div>
+            <div><br></div>
+            <div class="sec">== Errors (1) ==</div>
+            <div class="err">#1 [general] fatal</div>
+            <div>message: Analysis failed</div>
+            <div class="dim">details:</div>
+            <div class="dim">    Error: could not read src/styles.scss</div>
+            <div><br></div>
+            <div class="sec">== Log (38 entries) ==</div>
+            <div><span class="info">[10:41:52.011] [INFO]</span> Dead CSS Cleaner activated</div>
+            <div><span class="info">[10:41:55.714] [INFO]</span> Run "manual" complete: 12 dead token(s)</div>
+            <div><span class="info">[10:42:19.002] [INFO]</span> <span class="highlight">Log exported to dead-css-cleaner.log</span></div>
+            <div class="dim">...</div>
+        </div>
+    </div>
+
+    <div class="callout c1"><span class="n">1</span> Click Export Logs</div>
+    <div class="callout c2"><span class="n">2</span> Notepad opens with everything</div>
+    <div class="callout c3"><span class="n">3</span> Or run it from the Command Palette</div>
+
+    <div class="statusbar">
+        <div class="left"><span>⚠ 12 dead CSS selectors</span><span>main*</span><span>⊗ 0  △ 0</span></div>
+        <div class="right"><span>Ln 1, Col 1</span><span>Spaces: 2</span><span>UTF-8</span><span>SCSS</span></div>
+    </div>
+</div>
+</body>
+</html>

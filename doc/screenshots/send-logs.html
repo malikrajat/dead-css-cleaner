@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Send the log</title>
+<style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #0d1117; }
+    body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; color: #c9d1d9; }
+    .shot { position: relative; width: 1280px; height: 800px; overflow: hidden; background: #0d1117; }
+
+    .gh-header { height: 56px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; align-items: center; padding: 0 26px; gap: 18px; }
+    .gh-logo { width: 30px; height: 30px; border-radius: 50%; background: #f0f6fc; display: flex; align-items: center; justify-content: center; color: #0d1117; font-weight: 900; font-size: 18px; }
+    .gh-repo { font-size: 14px; color: #8b949e; }
+    .gh-repo b { color: #f0f6fc; font-weight: 600; }
+    .gh-nav { margin-left: auto; display: flex; gap: 18px; font-size: 13px; color: #8b949e; }
+    .gh-nav .active { color: #f0f6fc; font-weight: 600; border-bottom: 2px solid #f78166; padding-bottom: 18px; margin-bottom: -18px; }
+
+    .content { position: absolute; left: 0; right: 0; top: 56px; bottom: 0; display: flex; }
+    .issue { width: 640px; padding: 28px 32px; border-right: 1px solid #30363d; }
+    .issue h1 { font-size: 26px; font-weight: 600; color: #f0f6fc; margin: 0 0 6px; }
+    .issue .sub { font-size: 13px; color: #8b949e; margin: 0 0 22px; }
+    .field { margin-bottom: 18px; }
+    .label { font-size: 13px; font-weight: 600; color: #f0f6fc; margin-bottom: 6px; }
+    .req { color: #f85149; margin-left: 3px; }
+    .input { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 8px 12px; font-size: 13px; color: #c9d1d9; }
+    .textarea { min-height: 160px; line-height: 1.5; position: relative; }
+    .textarea .text { color: #8b949e; }
+    .dropzone {
+        margin-top: 10px; border: 1px dashed #30363d; border-radius: 6px; padding: 12px;
+        display: flex; align-items: center; gap: 10px; background: #161b22;
+    }
+    .file-chip {
+        display: inline-flex; align-items: center; gap: 8px; background: #21262d; border: 1px solid #30363d;
+        border-radius: 6px; padding: 6px 10px; font-size: 12px; color: #c9d1d9; font-family: "Consolas", monospace;
+    }
+    .file-chip .doc { color: #58a6ff; }
+    .attach-hint { font-size: 12px; color: #8b949e; }
+    .gh-btn { background: #238636; color: #fff; border: none; border-radius: 6px; padding: 7px 16px; font-size: 13px; font-weight: 600; font-family: inherit; }
+    .gh-btn.secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+    .issue-actions { display: flex; gap: 10px; margin-top: 18px; }
+
+    .mail-wrap { flex: 1; padding: 34px 28px; display: flex; align-items: flex-start; justify-content: center; background: radial-gradient(circle at 50% 0%, #17233a, #0d1117 60%); }
+    .mail {
+        width: 520px; background: #ffffff; color: #1e1e1e; border-radius: 8px; overflow: hidden;
+        box-shadow: 0 18px 48px rgba(0,0,0,.55); border: 1px solid #d0d7de;
+    }
+    .mail-head { height: 44px; background: #f6f8fa; border-bottom: 1px solid #d0d7de; display: flex; align-items: center; padding: 0 14px; gap: 10px; font-size: 13px; font-weight: 600; color: #24292f; }
+    .mail-head .send { margin-left: auto; background: #1a73e8; color: #fff; border-radius: 4px; padding: 5px 14px; font-size: 12px; }
+    .mail-row { display: flex; gap: 12px; align-items: center; padding: 9px 16px; border-bottom: 1px solid #eaeef2; font-size: 13px; }
+    .mail-row .k { color: #6e7781; width: 54px; }
+    .mail-row .v { color: #24292f; }
+    .mail-body { padding: 16px; font-size: 13px; color: #24292f; line-height: 1.55; min-height: 220px; }
+    .mail-attach {
+        margin: 0 16px 16px; display: flex; align-items: center; gap: 10px; border: 1px solid #d0d7de;
+        background: #f6f8fa; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #24292f;
+    }
+    .mail-attach .doc { width: 26px; height: 30px; border-radius: 3px; background: #e1e7ef; display: flex; align-items: center; justify-content: center; color: #1a73e8; font-size: 14px; font-weight: 700; }
+    .mail-attach .size { color: #6e7781; margin-left: auto; }
+
+    .callout { position: absolute; background: #ffcc00; color: #1b1b1b; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,.5); display: flex; align-items: center; gap: 6px; z-index: 12; }
+    .callout .n { width: 17px; height: 17px; border-radius: 50%; background: #1b1b1b; color: #ffcc00; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+    .c1 { left: 32px; top: 430px; }
+    .c2 { right: 44px; top: 104px; }
+    .title-banner { position: absolute; left: 32px; top: 16px; color: #f0f6fc; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; opacity: .85; }
+</style>
+</head>
+<body>
+<div class="shot" id="shot">
+    <div class="gh-header">
+        <div class="gh-logo">G</div>
+        <div class="gh-repo"><b>malikrajat</b> / dead-css-cleaner</div>
+        <div class="gh-nav"><span class="active">Issues</span><span>Pull requests</span><span>Actions</span><span>Projects</span><span>Wiki</span><span>Security</span></div>
+    </div>
+
+    <div class="content">
+        <div class="issue">
+            <h1>Create a new issue</h1>
+            <p class="sub">Found a problem? Attach the log file so it can be diagnosed quickly.</p>
+
+            <div class="field">
+                <div class="label">Title<span class="req">*</span></div>
+                <div class="input">Analysis fails on a large SCSS workspace</div>
+            </div>
+
+            <div class="field">
+                <div class="label">Description</div>
+                <div class="input textarea">
+                    <div class="text">What happened, what you expected, and the steps to reproduce. Include the CSS rule and the template snippet if possible.</div>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="label">Diagnostics bundle or log</div>
+                <div class="input textarea" style="min-height:100px;position:relative;">
+                    <div class="text">Drag the exported <b style="color:#c9d1d9;">dead-css-cleaner.log</b> here, or paste the lines you need.</div>
+                    <div class="dropzone">
+                        <span class="file-chip"><span class="doc">▤</span> dead-css-cleaner.log <span style="color:#8b949e;">· 18 KB</span></span>
+                        <span class="attach-hint">Attached</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="issue-actions">
+                <button type="button" class="gh-btn">Create</button>
+                <button type="button" class="gh-btn secondary">Cancel</button>
+            </div>
+        </div>
+
+        <div class="mail-wrap">
+            <div class="mail">
+                <div class="mail-head"><span>New message</span><span class="send">Send</span></div>
+                <div class="mail-row"><span class="k">To</span><span class="v">support@rajatmalik.dev</span></div>
+                <div class="mail-row"><span class="k">Subject</span><span class="v">Dead CSS Cleaner 2.2.0 — analysis fails</span></div>
+                <div class="mail-body">
+                    Hi Rajat,<br /><br />
+                    The analysis fails on my workspace. I attached the log exported from
+                    <b>Dead CSS Cleaner: Export Logs</b>.<br /><br />
+                    Steps to reproduce:<br />
+                    1. Open the project<br />
+                    2. Run Analyze Workspace for Dead CSS<br />
+                    3. The error notification appears<br /><br />
+                    Thanks!
+                </div>
+                <div class="mail-attach">
+                    <span class="doc">▤</span>
+                    <span><b>dead-css-cleaner.log</b><br /><span style="color:#6e7781;">18 KB · log file</span></span>
+                    <span class="size">✕</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout c1"><span class="n">1</span> Attach the log to the issue</div>
+    <div class="callout c2"><span class="n">2</span> Or email it</div>
+</div>
+</body>
+</html>

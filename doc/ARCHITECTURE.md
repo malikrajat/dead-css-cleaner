@@ -39,11 +39,12 @@ This page explains how the extension is put together, which rules the code follo
 | `config.ts` | The `ExtensionConfig` type, defaults, `normalizeConfig()` (coerce, clamp, validate), dynamic pattern compilation. |
 | `types.ts` | Shared data types: `Detection`, `CssRuleInfo`, `UsageResult`, `AnalysisResult`, statistics. |
 | `errors.ts` | `ErrorCollector` (a namespaced object: bounded log of 200 entries, subscribable) plus `safeSync`/`safeAsync`. |
-| `logger.ts` | Tiny logger with pluggable sinks. In VS Code the sink is an `OutputChannel`; elsewhere it buffers to the console. Also keeps a bounded 5,000-record history for the diagnostics bundle. |
+| `logger.ts` | Tiny logger with pluggable sinks. In VS Code the sinks are an `OutputChannel` and the single log file; elsewhere it buffers to the console. Also keeps a bounded 5,000-record history for the diagnostics bundle. |
 | `cache.ts` | `AnalysisCache<T>`: mtime and size keyed per-file parse results, with hit/miss statistics. |
 | `textUtils.ts` | `LineIndex` (offset to line/column and back), `findMatches` (safe global regex iteration), token splitting, dynamic prefix detection, string literal scanning, binary sniffing. |
 | `supportBundle.ts` | Pure support-bundle model: redacts home/workspace paths, formats environment, settings, stats, errors and logs, and creates the ZIP with `fflate`. |
-| `errorReporter.ts` | The only place that turns collected errors into VS Code notifications and documents, including the **Download Log** action and process-level crash capture. |
+| `logFile.ts` | Pure single-file log rendering: the startup header and the complete export (environment, errors and every log record), including friendly "nothing logged yet" text. |
+| `errorReporter.ts` | The only place that turns collected errors into VS Code notifications and documents, including the single **Export Logs** action and process-level crash capture. |
 
 ### `src/parsers` - pure parsing, no VS Code dependency
 
@@ -77,6 +78,7 @@ This page explains how the extension is put together, which rules the code follo
 | `componentReport.ts` | Group findings by owning component, render the per-component Markdown report and the flat copy list, and describe the validated scope. |
 | `deadCssTreeView.ts` | Sidebar view: component → dead class → selector chain, scope and "used elsewhere" files, with reveal/remove/ignore actions. |
 | `supportBundle.ts` | VS Code side of diagnostics: reads settings/environment/stats, resolves the Downloads folder, writes the ZIP and shows the toast with **Show in Folder**, **Open GitHub Issue** and **Copy Path**. |
+| `logFile.ts` | VS Code side of the single-file log: creates `dead-css-cleaner.log` during activation, appends every log record and error, rebuilds the complete file on export, and opens it in Notepad (Windows) or the default text handler. |
 
 ---
 
@@ -161,6 +163,7 @@ Any new parser needs at least one fixture in `test-files/` and one unit test. Ne
 | Comparison and end-to-end unit tests | `src/test/unit/{usageIndex,spaScenario}.test.ts` | Plain Node (`npm run test:unit:analysis`, `:scenarios`) |
 | Report builders | `src/test/unit/reportText.test.ts` | Plain Node (`npm run test:unit:reports`) |
 | Support bundle (redaction, formatting, ZIP) | `src/test/unit/supportBundle.test.ts` | Plain Node (`npm run test:unit`) |
+| Single-file log (header, complete export, empty state) | `src/test/unit/logFile.test.ts` | Plain Node (`npm run test:unit`) |
 | Coverage | c8 over `src/core`, `src/parsers`, `src/analysis`, `src/features` | Plain Node (`npm run test:coverage`) |
 | VS Code integration tests (activation, commands, diagnostics on `test-files/`) | `src/test/suite/extension.test.ts` | Downloaded VS Code (`npm run test:vscode`) |
 | CLI smoke run using the production pipeline | `npm run analyze -- test-files/spa` | Plain Node |

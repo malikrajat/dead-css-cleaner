@@ -8,6 +8,7 @@ import { buildRemoveAllEdit, DeadCssCodeActionProvider } from './features/codeAc
 import { buildComponentReportMarkdown, type ReportRow } from './features/componentReport';
 import { DeadCssTreeProvider, deadCssListForClipboard } from './features/deadCssTreeView';
 import { DeadCssHoverProvider } from './features/hoverProvider';
+import { initializeLogFile, registerLogExportCommand } from './features/logFile';
 import { exportReport } from './features/report';
 import { registerDiagnosticsCommand } from './features/supportBundle';
 import { ExtensionState } from './state';
@@ -20,11 +21,14 @@ let watcherThrottleTimer: NodeJS.Timeout | undefined;
 
 export function activate(context: vscode.ExtensionContext): void {
     initializeOutputChannel(context);
+    // Start the single-file log before anything else can fail.
+    initializeLogFile(context);
+    registerLogExportCommand(context);
     registerErrorReporting(context);
     installCrashHandlers(context);
 
-    // The diagnostics command is registered before anything else so the
-    // "Download Log" button also works when activation itself fails.
+    // The log export button is registered before activation work begins so it
+    // still works when activation itself fails.
     const stateRef: { current?: ExtensionState } = {};
     registerDiagnosticsCommand(context, () => stateRef.current);
 

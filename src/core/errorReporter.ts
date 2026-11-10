@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
-import { DOWNLOAD_DIAGNOSTICS_COMMAND } from './commandIds';
+import { EXPORT_LOGS_COMMAND } from './commandIds';
 import { type AnalysisError, ErrorCollector } from './errors';
 import { type LogRecord, logger } from './logger';
 
@@ -36,8 +36,8 @@ export function showOutputChannel(): void {
  * Surface only *fatal* problems in the UI. Recoverable parse issues are logged
  * so the user is never interrupted by noise, but can still inspect them.
  *
- * Every fatal notification offers "Download Log", which writes a ZIP bundle
- * with the session log, error records, environment, settings and analysis stats.
+ * Every fatal notification offers a single "Export Logs" button. It rebuilds the
+ * complete single-file log (errors + log + environment) and opens it in Notepad.
  */
 export function registerErrorReporting(context: vscode.ExtensionContext): void {
     ErrorCollector.subscribe((error) => {
@@ -63,7 +63,7 @@ export function registerErrorReporting(context: vscode.ExtensionContext): void {
  *
  * `uncaughtExceptionMonitor` observes crashes without changing Node's default
  * behaviour. Errors whose stack points into this extension are marked fatal, so
- * the user gets the same "Download Log" notification; unrelated extension-host
+ * the user gets the same "Export Logs" notification; unrelated extension-host
  * errors are only recorded.
  */
 export function installCrashHandlers(context: vscode.ExtensionContext): void {
@@ -107,24 +107,15 @@ function notifyFatal(error: AnalysisError): void {
         ? `Dead CSS Cleaner could not be applied to ${path.basename(error.file)}: ${error.message}`
         : `Dead CSS Cleaner: ${error.message}`;
 
-    vscode.window
-        .showWarningMessage(message, 'Download Log', 'Show Log', 'Show Errors', 'Open Settings')
-        .then((action) => {
-            if (action === 'Download Log') {
-                vscode.commands
-                    .executeCommand(DOWNLOAD_DIAGNOSTICS_COMMAND)
-                    .then(undefined, (commandError: unknown) => {
-                        logger.warn('Could not download the diagnostics bundle', String(commandError));
-                        showOutputChannel();
-                    });
-            } else if (action === 'Show Log') {
+    // One button: write the complete log to a single file and open it in Notepad.
+    vscode.window.showWarningMessage(message, 'Export Logs').then((action) => {
+        if (action === 'Export Logs') {
+            vscode.commands.executeCommand(EXPORT_LOGS_COMMAND).then(undefined, (commandError: unknown) => {
+                logger.warn('Could not export the log file', String(commandError));
                 showOutputChannel();
-            } else if (action === 'Show Errors') {
-                showErrorSummary();
-            } else if (action === 'Open Settings') {
-                vscode.commands.executeCommand('workbench.action.openSettings', 'unusedCssDetector');
-            }
-        });
+            });
+        }
+    });
 }
 
 export function showErrorSummary(): void {

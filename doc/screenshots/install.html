@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Install Dead CSS Cleaner</title>
+<style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #1e1e1e; }
+    body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        color: #cccccc;
+    }
+    .shot { position: relative; width: 1280px; height: 800px; overflow: hidden; background: #1e1e1e; }
+    .titlebar {
+        height: 40px; background: #3c3c3c; display: flex; align-items: center;
+        padding: 0 14px; gap: 16px; font-size: 13px; color: #cccccc; border-bottom: 1px solid #2b2b2b;
+    }
+    .traffic { display: flex; gap: 7px; margin-right: 8px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+    .menus { display: flex; gap: 15px; color: #bfbfbf; }
+    .title { flex: 1; text-align: center; color: #d7d7d7; font-size: 13px; }
+    .body { display: flex; height: 738px; }
+    .activity {
+        width: 52px; background: #333333; display: flex; flex-direction: column;
+        align-items: center; padding-top: 10px; gap: 6px; border-right: 1px solid #2b2b2b;
+    }
+    .act {
+        width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+        color: #858585; font-size: 21px; border-left: 2px solid transparent; position: relative;
+    }
+    .act.active { color: #ffffff; border-left-color: #ffffff; }
+    .act.badge::after {
+        content: ""; position: absolute; right: 9px; top: 9px; width: 7px; height: 7px;
+        border-radius: 50%; background: #007acc;
+    }
+    .sidebar {
+        width: 360px; background: #252526; border-right: 1px solid #2b2b2b; padding: 0 0 16px;
+    }
+    .sidebar-head {
+        height: 40px; display: flex; align-items: center; justify-content: space-between;
+        padding: 0 18px; font-size: 11px; letter-spacing: .08em; color: #bbbbbb; text-transform: uppercase;
+    }
+    .sidebar-head .dots { letter-spacing: 1px; color: #9d9d9d; }
+    .search {
+        margin: 0 14px 10px; height: 30px; background: #3c3c3c; border: 1px solid #5a5a5a;
+        border-radius: 3px; display: flex; align-items: center; padding: 0 9px; gap: 8px;
+        font-size: 13px; color: #e7e7e7;
+    }
+    .search .mag { color: #9d9d9d; font-size: 14px; }
+    .chips { display: flex; gap: 8px; margin: 0 14px 12px; }
+    .chip {
+        font-size: 11px; color: #cccccc; border: 1px solid #4a4a4a; border-radius: 10px;
+        padding: 2px 9px; background: #2d2d2d;
+    }
+    .section-label {
+        font-size: 11px; letter-spacing: .08em; color: #8f8f8f; text-transform: uppercase;
+        padding: 6px 18px 8px;
+    }
+    .result {
+        margin: 0 10px; padding: 12px 10px; display: flex; gap: 12px; border-radius: 5px;
+        background: #2a2d2e; border: 1px solid #37373d;
+    }
+    .ext-icon {
+        width: 62px; height: 62px; flex: 0 0 62px; border-radius: 9px; position: relative;
+        background: linear-gradient(145deg, #0b5cad, #0a3d73 70%);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 4px 12px rgba(0,0,0,.35);
+        display: flex; align-items: center; justify-content: center;
+        color: #ffffff; font-weight: 800; font-size: 20px; letter-spacing: -.5px;
+    }
+    .ext-icon::after {
+        content: ""; position: absolute; left: 13px; right: 13px; bottom: 16px; height: 3px;
+        border-radius: 2px; background: #79d4ff; box-shadow: 0 8px 0 #79d4ff; opacity: .9;
+    }
+    .result-main { flex: 1; min-width: 0; }
+    .result-top { display: flex; align-items: baseline; gap: 7px; }
+    .name { font-size: 14px; font-weight: 600; color: #ffffff; }
+    .ver { font-size: 11px; color: #9d9d9d; }
+    .publisher { font-size: 11px; color: #9d9d9d; margin-top: 1px; }
+    .installs { font-size: 11px; color: #9d9d9d; margin-top: 1px; }
+    .desc { font-size: 12px; line-height: 1.45; color: #c5c5c5; margin-top: 7px; }
+    .tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .tag { font-size: 10px; color: #b8d8f0; background: rgba(0,122,204,.16); border: 1px solid rgba(0,122,204,.5); border-radius: 3px; padding: 2px 6px; }
+    .actions { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    .install {
+        background: #007acc; color: #ffffff; border: none; border-radius: 2px; padding: 6px 18px;
+        font-size: 12px; font-weight: 600; font-family: inherit; box-shadow: 0 1px 0 rgba(0,0,0,.3);
+    }
+    .btn-ghost {
+        background: #3a3d41; color: #cccccc; border: 1px solid #4a4d51; border-radius: 2px;
+        padding: 5px 10px; font-size: 11px; font-family: inherit;
+    }
+    .main { flex: 1; padding: 46px 64px; background: #1e1e1e; position: relative; }
+    .main h1 { font-size: 30px; font-weight: 300; margin: 0 0 10px; color: #e8e8e8; letter-spacing: -.2px; }
+    .main .lead { font-size: 14px; color: #a9a9a9; margin: 0 0 30px; max-width: 620px; line-height: 1.55; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 760px; }
+    .step {
+        background: #252526; border: 1px solid #37373d; border-radius: 6px; padding: 16px;
+        position: relative;
+    }
+    .step .num {
+        width: 24px; height: 24px; border-radius: 50%; background: #007acc; color: #fff;
+        display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .step h3 { margin: 0 0 6px; font-size: 13px; color: #ffffff; font-weight: 600; }
+    .step p { margin: 0; font-size: 12px; color: #a9a9a9; line-height: 1.5; }
+    .callout {
+        position: absolute; background: #ffcc00; color: #1b1b1b; font-size: 12px; font-weight: 700;
+        padding: 5px 10px; border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,.45);
+        display: flex; align-items: center; gap: 6px; z-index: 5;
+    }
+    .callout .n {
+        width: 17px; height: 17px; border-radius: 50%; background: #1b1b1b; color: #ffcc00;
+        display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;
+    }
+    .c1 { left: 356px; top: 84px; }
+    .c2 { left: 66px; top: 396px; }
+    .statusbar {
+        height: 22px; background: #007acc; color: #ffffff; display: flex; align-items: center;
+        justify-content: space-between; padding: 0 10px; font-size: 11px;
+    }
+    .statusbar .left, .statusbar .right { display: flex; align-items: center; gap: 14px; }
+    .brand { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+    .brand-mark { width: 12px; height: 12px; border-radius: 3px; background: #fff; opacity: .9; }
+</style>
+</head>
+<body>
+<div class="shot" id="shot">
+    <div class="titlebar">
+        <div class="traffic"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="menus"><span>File</span><span>Edit</span><span>Selection</span><span>View</span><span>Go</span><span>Run</span><span>Terminal</span><span>Help</span></div>
+        <div class="title">Extensions — Visual Studio Code</div>
+    </div>
+
+    <div class="body">
+        <div class="activity">
+            <div class="act">🗎</div>
+            <div class="act">🔍</div>
+            <div class="act">⎇</div>
+            <div class="act">▷</div>
+            <div class="act">⧉</div>
+            <div class="act active">▦</div>
+            <div class="act badge">⚙</div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-head"><span>Extensions</span><span class="dots">⋯</span></div>
+            <div class="search"><span class="mag">⌕</span><span>dead css cleaner</span></div>
+            <div class="chips"><span class="chip">Marketplace</span><span class="chip">Installed</span></div>
+            <div class="section-label">1 result</div>
+
+            <div class="result">
+                <div class="ext-icon">CSS</div>
+                <div class="result-main">
+                    <div class="result-top"><span class="name">Dead CSS Cleaner</span><span class="ver">v2.2.0</span></div>
+                    <div class="publisher">RajatMalik</div>
+                    <div class="installs">12.4K installs &nbsp;·&nbsp; ★★★★★ 4.8</div>
+                    <div class="desc">Find and remove unused CSS selectors in React, Angular, Vue, Svelte and plain HTML/CSS projects.</div>
+                    <div class="tags"><span class="tag">CSS</span><span class="tag">Linter</span><span class="tag">React</span><span class="tag">Angular</span></div>
+                    <div class="actions"><button type="button" class="install">Install</button><button type="button" class="btn-ghost">Details</button></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <h1>Install Dead CSS Cleaner</h1>
+            <p class="lead">Open the Extensions view, search for <strong>Dead CSS Cleaner</strong>, and click <strong>Install</strong>. The extension activates as soon as your workspace contains a stylesheet.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="num">1</div>
+                    <h3>Open Extensions</h3>
+                    <p>Click the Extensions icon in the activity bar or press <strong>Ctrl/Cmd + Shift + X</strong>.</p>
+                </div>
+                <div class="step">
+                    <div class="num">2</div>
+                    <h3>Search by name</h3>
+                    <p>Type <strong>dead css cleaner</strong> and pick the result published by <strong>RajatMalik</strong>.</p>
+                </div>
+                <div class="step">
+                    <div class="num">3</div>
+                    <h3>Click Install</h3>
+                    <p>After installation, open a CSS/SCSS project and run <strong>Dead CSS Cleaner: Analyze Workspace</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout c1"><span class="n">1</span> Search here</div>
+    <div class="callout c2"><span class="n">2</span> Click Install</div>
+
+    <div class="statusbar">
+        <div class="left"><span class="brand"><span class="brand-mark"></span> Dead CSS Cleaner</span><span>✓ No dead CSS</span></div>
+        <div class="right"><span>Ln 1, Col 1</span><span>Spaces: 4</span><span>UTF-8</span><span>CSS</span></div>
+    </div>
+</div>
+</body>
+</html>
